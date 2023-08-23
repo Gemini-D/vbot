@@ -102,12 +102,6 @@ class Vbot extends Container
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
         $default = [
             'path' => $path,
-            'log' => [
-                'level' => 'debug',
-                'permission' => 0777,
-                'system' => $path . 'log', // 系统报错日志
-                'message' => $path . 'log', // 消息日志
-            ],
             'download' => [
                 'emoticon_path' => $path . '/emoticon',
             ],

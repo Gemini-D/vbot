@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Core\Server;
-use Hanson\Vbot\Core\Swoole;
 use Hanson\Vbot\Core\Sync;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
 use Pimple\Container;
@@ -17,9 +16,6 @@ class ServerServiceProvider implements ServiceProviderInterface
         $pimple['server'] = function () use ($pimple) {
             return new Server($pimple);
         };
-        // $pimple->singleton('swoole', function () use ($pimple) {
-        //     return new Swoole($pimple);
-        // });
         $pimple['sync'] = function () use ($pimple) {
             return new Sync($pimple);
         };

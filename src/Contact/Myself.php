@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Support\Content;
-use Monolog\Handler\StreamHandler;
 
 class Myself
 {
@@ -27,7 +26,6 @@ class Myself
         $this->log();
 
         $this->setPath();
-        $this->setLog();
     }
 
     private function log()
@@ -46,22 +44,5 @@ class Myself
         if (! is_dir(vbot('config')['user_path']) && $this->uin) {
             mkdir(vbot('config')['user_path'], 0755, true);
         }
-    }
-
-    private function setLog()
-    {
-        vbot('log')->pushHandler(new StreamHandler(
-            vbot('config')->get('log.system') . DIRECTORY_SEPARATOR . $this->uin . DIRECTORY_SEPARATOR . 'vbot.log',
-            vbot('config')->get('log.level'),
-            true,
-            vbot('config')->get('log.permission')
-        ));
-
-        vbot('messageLog')->pushHandler(new StreamHandler(
-            vbot('config')->get('log.message') . DIRECTORY_SEPARATOR . $this->uin . DIRECTORY_SEPARATOR . 'message.log',
-            vbot('config')->get('log.level'),
-            true,
-            vbot('config')->get('log.permission')
-        ));
     }
 }
