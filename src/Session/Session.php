@@ -23,7 +23,7 @@ class Session
 
     public function currentSession()
     {
-        $arguments = getopt(null, ['session::']);
+        $arguments = getopt('', ['session::']);
 
         return isset($arguments['session']) && $arguments['session'] ? $arguments['session'] :
             $this->vbot->config->get('session', $this->randomKey());

@@ -4,6 +4,7 @@ namespace Hanson\Vbot\Console;
 
 use Carbon\Carbon;
 use Hanson\Vbot\Foundation\Vbot;
+use Hyperf\Collection\Arr;
 use Monolog\Logger;
 
 class Console
@@ -73,6 +74,6 @@ class Console
 
     public function isOutput()
     {
-        return array_get($this->config, 'output', true);
+        return Arr::get($this->config, 'output', true);
     }
 }

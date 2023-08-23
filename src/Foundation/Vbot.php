@@ -59,13 +59,13 @@ class Vbot extends Container
      */
     protected $providers = [
         // ServiceProviders\LogServiceProvider::class,
-        // ServiceProviders\ServerServiceProvider::class,
+        ServiceProviders\ServerServiceProvider::class,
         ServiceProviders\ExceptionServiceProvider::class,
         // ServiceProviders\CacheServiceProvider::class,
         ServiceProviders\HttpServiceProvider::class,
         ServiceProviders\ObserverServiceProvider::class,
-        // ServiceProviders\ConsoleServiceProvider::class,
-        // ServiceProviders\MessageServiceProvider::class,
+        ServiceProviders\ConsoleServiceProvider::class,
+        ServiceProviders\MessageServiceProvider::class,
         // ServiceProviders\ContactServiceProvider::class,
         // ServiceProviders\ApiServiceProvider::class,
         // ServiceProviders\ExtensionServiceProvider::class,
@@ -82,7 +82,14 @@ class Vbot extends Container
 
     private function initializeConfig(array $config)
     {
-        $this->config = new Repository($config);
+        $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
+        $default = [
+            'path' => $path,
+            'download' => [
+                'emoticon_path' => $path . '/emoticon',
+            ]
+        ];
+        $this->config = new Repository(array_merge($default, $config));
     }
 
     /**
@@ -93,5 +100,10 @@ class Vbot extends Container
         foreach ($this->providers as $provider) {
             $this->register(new $provider());
         }
+    }
+
+    public function __get(string $name)
+    {
+        return $this[$name];
     }
 }

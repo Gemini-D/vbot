@@ -7,19 +7,20 @@ use Hanson\Vbot\Core\Swoole;
 use Hanson\Vbot\Core\Sync;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
 use Hanson\Vbot\Foundation\Vbot;
+use Pimple\Container;
 
 class ServerServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $pimple)
+    public function register(Container $pimple)
     {
-        $pimple->singleton('server', function () use ($pimple) {
+        $pimple['server'] = function () use ($pimple) {
             return new Server($pimple);
-        });
-        $pimple->singleton('swoole', function () use ($pimple) {
-            return new Swoole($pimple);
-        });
-        $pimple->singleton('sync', function () use ($pimple) {
-            return new Sync($pimple);
-        });
+        };
+        // $pimple->singleton('swoole', function () use ($pimple) {
+        //     return new Swoole($pimple);
+        // });
+        // $pimple->singleton('sync', function () use ($pimple) {
+        //     return new Sync($pimple);
+        // });
     }
 }

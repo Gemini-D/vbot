@@ -3,6 +3,9 @@
 namespace Hanson\Vbot\Foundation;
 
 use Hanson\Vbot\Session\Session;
+use Hyperf\Coordinator\Constants;
+use Hyperf\Coordinator\CoordinatorManager;
+use function Hyperf\Coroutine\go;
 
 class Kernel
 {
@@ -66,10 +69,10 @@ class Kernel
 
     private function bootstrapException()
     {
-        error_reporting(-1);
-        set_error_handler([$this->vbot->exception, 'handleError']);
-        set_exception_handler([$this->vbot->exception, 'handleException']);
-        register_shutdown_function([$this->vbot->exception, 'handleShutdown']);
+        go(function(){
+            CoordinatorManager::until(Constants::WORKER_EXIT)->yield();
+            $this->vbot->exception->handleShutdown();
+        });
     }
 
     /**

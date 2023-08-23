@@ -2,6 +2,7 @@
 
 namespace Hanson\Vbot\Console;
 
+use Hyperf\Collection\Arr;
 use PHPQRCode\QRcode as QrCodeConsole;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -18,7 +19,7 @@ class QrCode extends Console
      */
     public function show($text)
     {
-        if (!array_get($this->config, 'qrcode', true)) {
+        if (!Arr::get($this->config, 'qrcode', true)) {
             return false;
         }
         $output = new ConsoleOutput();

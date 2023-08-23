@@ -19,7 +19,8 @@
     "require": {
         "aferrandini/phpqrcode": "^1.0",
         "pimple/pimple": "^3.5",
-        "hyperf/collection": "^3.0"
+        "hyperf/collection": "^3.0",
+        "hyperf/coroutine": "^3.0"
     },
     "autoload": {
         "files": [
