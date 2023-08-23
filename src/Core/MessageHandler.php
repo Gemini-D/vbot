@@ -6,6 +6,7 @@ namespace Hanson\Vbot\Core;
 
 use Carbon\Carbon;
 use Hanson\Vbot\Exceptions\ArgumentException;
+use Hanson\Vbot\Exceptions\VBotExitException;
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Message\Text;
 use Hyperf\Collection\Collection;
@@ -146,6 +147,12 @@ class MessageHandler
         }
 
         $message = $this->vbot->sync->sync();
+        $retCode = $message['BaseResponse']['Ret'];
+        if (in_array($retCode, [1100, 1101, 1102, 1205])) { // 微信客户端上登出或者其他设备登录
+            $this->vbot->console->log('vbot exit normally.');
+            $this->vbot->cache->forget('session.' . $this->vbot->config['session']);
+            throw new VBotExitException();
+        }
 
         $this->log($message);
 
