@@ -13,35 +13,35 @@ use Hanson\Vbot\Contact\Officials;
 use Hanson\Vbot\Contact\Specials;
 use Hanson\Vbot\Core\ContactFactory;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
+use Pimple\Container;
 
 class ContactServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $pimple)
+    public function register(Container $pimple)
     {
-        $pimple->bind('contactFactory', function () use ($pimple) {
+        $pimple['contactFactory'] = function () use ($pimple) {
             return new ContactFactory($pimple);
-        });
-        $pimple->singleton('myself', function () {
+        };
+        $pimple['myself'] = function () {
             return new Myself();
-        });
-        $pimple->singleton('friends', function () use ($pimple) {
+        };
+        $pimple['friends'] = function () use ($pimple) {
             return (new Friends())->setVbot($pimple);
-        });
-        $pimple->singleton('groups', function () use ($pimple) {
+        };
+        $pimple['groups'] = function () use ($pimple) {
             return (new Groups())->setVbot($pimple);
-        });
-        $pimple->singleton('members', function () use ($pimple) {
+        };
+        $pimple['members'] = function () use ($pimple) {
             return (new Members())->setVbot($pimple);
-        });
-        $pimple->singleton('officials', function () use ($pimple) {
+        };
+        $pimple['officials'] = function () use ($pimple) {
             return (new Officials())->setVbot($pimple);
-        });
-        $pimple->singleton('specials', function () use ($pimple) {
+        };
+        $pimple['specials'] = function () use ($pimple) {
             return (new Specials())->setVbot($pimple);
-        });
-        $pimple->singleton('contacts', function () use ($pimple) {
+        };
+        $pimple['contacts'] = function () use ($pimple) {
             return (new Contacts())->setVbot($pimple);
-        });
+        };
     }
 }

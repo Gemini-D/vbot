@@ -11,6 +11,7 @@ class Groups extends Contacts
     /**
      * 判断是否群组.
      *
+     * @param mixed $userName
      * @return bool
      */
     public function isGroup($userName)
@@ -22,6 +23,7 @@ class Groups extends Contacts
      * 根据群名筛选群组.
      *
      * @param bool $blur
+     * @param mixed $nickname
      *
      * @return static
      */
@@ -33,6 +35,8 @@ class Groups extends Contacts
     /**
      * 根据username获取群成员.
      *
+     * @param mixed $username
+     * @param mixed $memberUsername
      * @return mixed
      */
     public function getMemberByUsername($username, $memberUsername)
@@ -54,6 +58,8 @@ class Groups extends Contacts
      * 根据昵称搜索群成员.
      *
      * @param bool $blur
+     * @param mixed $groupUsername
+     * @param mixed $memberNickname
      *
      * @return array|bool
      */
@@ -104,6 +110,8 @@ class Groups extends Contacts
     /**
      * 删除群成员.
      *
+     * @param mixed $group
+     * @param mixed $members
      * @return bool
      */
     public function deleteMember($group, $members)
@@ -121,6 +129,8 @@ class Groups extends Contacts
     /**
      * 添加群成员.
      *
+     * @param mixed $groupUsername
+     * @param mixed $members
      * @return bool
      */
     public function addMember($groupUsername, $members)
@@ -150,6 +160,8 @@ class Groups extends Contacts
     /**
      * 设置群名称.
      *
+     * @param mixed $group
+     * @param mixed $name
      * @return bool
      */
     public function setGroupName($group, $name)
@@ -170,6 +182,7 @@ class Groups extends Contacts
     /**
      * 增加群聊天到group.
      *
+     * @param mixed $username
      * @return bool
      * @throws CreateGroupException
      */
@@ -197,6 +210,8 @@ class Groups extends Contacts
 
     /**
      * 更新群组.
+     * @param mixed $username
+     * @param null|mixed $list
      */
     public function update($username, $list = null): array
     {
@@ -208,6 +223,7 @@ class Groups extends Contacts
     /**
      * 生成username list 格式.
      *
+     * @param mixed $username
      * @return array
      */
     public function makeUsernameList($username)
@@ -242,6 +258,7 @@ class Groups extends Contacts
      * 修改群组获取，为空时更新群组.
      *
      * @param mixed $key
+     * @param null|mixed $default
      *
      * @return mixed
      */
@@ -255,6 +272,7 @@ class Groups extends Contacts
     /**
      * 生成member list 格式.
      *
+     * @param mixed $contacts
      * @return array
      */
     private function makeMemberList($contacts)

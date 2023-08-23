@@ -68,6 +68,7 @@ class ExceptionHandler
     /**
      * set a exception handler.
      *
+     * @param mixed $closure
      * @throws ArgumentException
      */
     public function setHandler($closure)

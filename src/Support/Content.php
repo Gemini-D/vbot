@@ -26,6 +26,7 @@ class Content
     /**
      * format XML for Content.
      *
+     * @param mixed $content
      * @return string
      */
     public static function formatContent($content)

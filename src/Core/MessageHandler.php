@@ -8,7 +8,7 @@ use Carbon\Carbon;
 use Hanson\Vbot\Exceptions\ArgumentException;
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Message\Text;
-use Illuminate\Support\Collection;
+use Hyperf\Collection\Collection;
 
 class MessageHandler
 {
@@ -59,6 +59,8 @@ class MessageHandler
      * handle a sync from wechat.
      *
      * @param bool $test
+     * @param mixed $retCode
+     * @param mixed $selector
      *
      * @return bool
      */
@@ -84,6 +86,7 @@ class MessageHandler
     /**
      * set a message handler.
      *
+     * @param mixed $callback
      * @throws ArgumentException
      */
     public function setHandler($callback)
@@ -98,6 +101,7 @@ class MessageHandler
     /**
      * set a custom handler.
      *
+     * @param mixed $callback
      * @throws ArgumentException
      */
     public function setCustomHandler($callback)
@@ -112,6 +116,7 @@ class MessageHandler
     /**
      * make a heartbeat every 30 minutes.
      *
+     * @param mixed $time
      * @return int
      */
     private function heartbeat($time)
@@ -132,6 +137,7 @@ class MessageHandler
 
     /**
      * 处理消息.
+     * @param mixed $selector
      */
     private function handleMessage($selector)
     {
@@ -161,6 +167,7 @@ class MessageHandler
 
     /**
      * log the message.
+     * @param mixed $message
      */
     private function log($message)
     {
@@ -183,6 +190,6 @@ class MessageHandler
 
     private function cache($msg, Collection $collection)
     {
-        $this->vbot->cache->put('msg-' . $msg['MsgId'], $collection->toArray(), 2);
+        // $this->vbot->cache->put('msg-' . $msg['MsgId'], $collection->toArray(), 2);
     }
 }

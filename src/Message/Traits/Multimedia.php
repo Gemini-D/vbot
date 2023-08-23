@@ -17,6 +17,8 @@ trait Multimedia
     /**
      * download multimedia.
      *
+     * @param mixed $message
+     * @param null|mixed $callback
      * @return bool
      * @throws ArgumentException
      */
@@ -38,6 +40,8 @@ trait Multimedia
     }
 
     /**
+     * @param mixed $username
+     * @param mixed $file
      * @return bool|mixed|string
      */
     public static function uploadVideo($username, $file)
@@ -100,6 +104,8 @@ trait Multimedia
     }
 
     /**
+     * @param mixed $username
+     * @param mixed $file
      * @return bool|mixed|string
      */
     public static function uploadMedia($username, $file)
@@ -163,6 +169,7 @@ trait Multimedia
      * download resource to a default path.
      *
      * @param bool $force
+     * @param mixed $message
      */
     protected static function autoDownload($message, $force = false)
     {
@@ -191,6 +198,7 @@ trait Multimedia
     /**
      * get a resource through api.
      *
+     * @param mixed $message
      * @return mixed
      */
     private static function getResource($message)
@@ -209,6 +217,7 @@ trait Multimedia
     /**
      * 获取媒体类型.
      *
+     * @param mixed $file
      * @return array
      */
     private static function getMediaType($file)
@@ -240,6 +249,7 @@ trait Multimedia
     /**
      * 把请求数组转为multipart模式.
      *
+     * @param mixed $data
      * @return array
      */
     private static function dataToMultipart($data)

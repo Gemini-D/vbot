@@ -53,6 +53,7 @@ class Console
      *
      * @param string $level
      * @param bool $log
+     * @param mixed $str
      */
     public function log($str, $level = 'INFO', $log = false)
     {
@@ -66,6 +67,7 @@ class Console
 
     /**
      * print message.
+     * @param mixed $str
      */
     public function message($str)
     {

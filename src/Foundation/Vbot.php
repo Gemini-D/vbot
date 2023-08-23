@@ -54,16 +54,16 @@ class Vbot extends Container
      * @var array
      */
     protected $providers = [
-        // ServiceProviders\LogServiceProvider::class,
+        ServiceProviders\LogServiceProvider::class,
         ServiceProviders\ServerServiceProvider::class,
         ServiceProviders\ExceptionServiceProvider::class,
-        // ServiceProviders\CacheServiceProvider::class,
+        ServiceProviders\CacheServiceProvider::class,
         ServiceProviders\HttpServiceProvider::class,
         ServiceProviders\ObserverServiceProvider::class,
         ServiceProviders\ConsoleServiceProvider::class,
         ServiceProviders\MessageServiceProvider::class,
-        // ServiceProviders\ContactServiceProvider::class,
-        // ServiceProviders\ApiServiceProvider::class,
+        ServiceProviders\ContactServiceProvider::class,
+        ServiceProviders\ApiServiceProvider::class,
         // ServiceProviders\ExtensionServiceProvider::class,
     ];
 
@@ -81,6 +81,11 @@ class Vbot extends Container
         return $this[$name];
     }
 
+    public static function getInstance()
+    {
+        return self::$instance;
+    }
+
     /**
      * Register providers.
      */
@@ -96,10 +101,16 @@ class Vbot extends Container
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
         $default = [
             'path' => $path,
+            'log' => [
+                'level' => 'debug',
+                'permission' => 0777,
+                'system' => $path . 'log', // 系统报错日志
+                'message' => $path . 'log', // 消息日志
+            ],
             'download' => [
                 'emoticon_path' => $path . '/emoticon',
             ],
         ];
-        $this->config = new Repository(array_merge($default, $config));
+        $this['config'] = new Repository(array_merge($default, $config));
     }
 }

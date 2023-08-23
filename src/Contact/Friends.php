@@ -11,6 +11,7 @@ class Friends extends Contacts
     /**
      * 根据微信号获取联系人.
      *
+     * @param mixed $alias
      * @return mixed
      */
     public function getContactByAlias($alias)
@@ -21,6 +22,7 @@ class Friends extends Contacts
     /**
      * 根据微信号获取联系username.
      *
+     * @param mixed $alias
      * @return mixed
      */
     public function getUsernameByAlias($alias)
@@ -31,6 +33,8 @@ class Friends extends Contacts
     /**
      * 设置备注.
      *
+     * @param mixed $username
+     * @param mixed $remarkName
      * @return bool
      */
     public function setRemarkName($username, $remarkName)
@@ -51,6 +55,7 @@ class Friends extends Contacts
      * 设置是否置顶.
      *
      * @param bool $isStick
+     * @param mixed $username
      *
      * @return bool
      */
@@ -70,6 +75,8 @@ class Friends extends Contacts
 
     /**
      * 主动添加好友.
+     * @param mixed $username
+     * @param null|mixed $content
      */
     public function add($username, $content = null)
     {
@@ -81,6 +88,7 @@ class Friends extends Contacts
 
     /**
      * 通过好友申请.
+     * @param mixed $message
      */
     public function approve($message)
     {
@@ -93,6 +101,9 @@ class Friends extends Contacts
     /**
      * 验证通过好友.
      *
+     * @param mixed $code
+     * @param mixed $userList
+     * @param null|mixed $content
      * @return bool
      */
     public function verifyUser($code, $userList, $content = null)
@@ -116,6 +127,8 @@ class Friends extends Contacts
 
     /**
      * 更新群组.
+     * @param mixed $username
+     * @param null|mixed $list
      */
     public function update($username, $list = null): array
     {
@@ -127,6 +140,7 @@ class Friends extends Contacts
     /**
      * 生成username list 格式.
      *
+     * @param mixed $username
      * @return array
      */
     public function makeUsernameList($username)

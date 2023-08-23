@@ -12,14 +12,12 @@ if (! function_exists('vbot')) {
      *
      * @return mixed|Vbot
      */
-    function vbot($abstract = null, array $parameters = [])
+    function vbot($abstract = null)
     {
         if (is_null($abstract)) {
             return Vbot::getInstance();
         }
 
-        return empty($parameters)
-            ? Vbot::getInstance()->make($abstract)
-            : Vbot::getInstance()->makeWith($abstract, $parameters);
+        return Vbot::getInstance()[$abstract];
     }
 }

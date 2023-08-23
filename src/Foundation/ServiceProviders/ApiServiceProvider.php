@@ -17,14 +17,14 @@ class ApiServiceProvider implements ServiceProviderInterface
      */
     public function register(Container $pimple)
     {
-        $pimple->singleton('api', function () use ($pimple) {
+        $pimple['api'] = function () use ($pimple) {
             return new ApiHandler($pimple);
-        });
-        $pimple->singleton('apiSend', function () use ($pimple) {
+        };
+        $pimple['apiSend'] = function () use ($pimple) {
             return new Send($pimple);
-        });
-        $pimple->singleton('apiSearch', function () use ($pimple) {
+        };
+        $pimple['apiSearch'] = function () use ($pimple) {
             return new Search($pimple);
-        });
+        };
     }
 }

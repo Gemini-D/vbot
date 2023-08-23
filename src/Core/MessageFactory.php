@@ -19,7 +19,7 @@ use Hanson\Vbot\Message\Touch;
 use Hanson\Vbot\Message\Transfer;
 use Hanson\Vbot\Message\Video;
 use Hanson\Vbot\Message\Voice;
-use Illuminate\Support\Collection;
+use Hyperf\Collection\Collection;
 
 class MessageFactory
 {
@@ -37,6 +37,7 @@ class MessageFactory
     }
 
     /**
+     * @param mixed $msg
      * @return Collection
      */
     public function make($msg)

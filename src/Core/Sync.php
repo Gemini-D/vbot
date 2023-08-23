@@ -76,6 +76,7 @@ class Sync
 
     /**
      * generate a sync key.
+     * @param mixed $result
      */
     public function generateSyncKey($result)
     {

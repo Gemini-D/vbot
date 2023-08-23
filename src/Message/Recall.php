@@ -43,6 +43,7 @@ class Recall extends Message implements MessageInterface
     /**
      * 解析message获取msgId.
      *
+     * @param mixed $xml
      * @return string msgId
      */
     private function parseMsgId($xml)

@@ -36,6 +36,7 @@ class MessageExtension
     /**
      * 读取业务消息拓展.
      *
+     * @param mixed $extensions
      * @throws ExtensionException
      */
     public function load($extensions)
@@ -75,6 +76,7 @@ class MessageExtension
     /**
      * 执行拓展.
      *
+     * @param mixed $collection
      * @return bool
      */
     public function exec($collection)
@@ -103,6 +105,7 @@ class MessageExtension
     /**
      * 添加业务消息拓展.
      *
+     * @param mixed $extension
      * @throws ExtensionException
      */
     private function addServiceExtension($extension)

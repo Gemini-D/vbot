@@ -11,6 +11,7 @@ class Location extends Message implements MessageInterface
     /**
      * 判断是否位置消息.
      *
+     * @param mixed $content
      * @return bool
      */
     public static function isLocation($content)

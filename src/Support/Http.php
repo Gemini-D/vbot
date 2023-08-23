@@ -77,6 +77,7 @@ class Http
      * @param string $method
      * @param array $options
      * @param bool $retry
+     * @param mixed $url
      *
      * @return string
      */

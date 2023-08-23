@@ -310,6 +310,7 @@ class Server
 
     /**
      * after init success.
+     * @param mixed $content
      */
     private function afterInitSuccess($content)
     {

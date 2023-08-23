@@ -6,7 +6,7 @@ namespace Hanson\Vbot\Extension;
 
 use Hanson\Vbot\Exceptions\ExtensionException;
 use Hanson\Vbot\Message\Text;
-use Illuminate\Support\Collection;
+use Hyperf\Collection\Collection;
 
 abstract class AbstractMessageHandler
 {
@@ -100,6 +100,7 @@ abstract class AbstractMessageHandler
 
     /**
      * 设置拓展开关.
+     * @param mixed $collection
      */
     final public function setStatus(bool $boolean, $collection)
     {
@@ -130,6 +131,7 @@ abstract class AbstractMessageHandler
 
     /**
      * 判断是否管理员.
+     * @param mixed $username
      */
     final public function isAdmin($username): bool
     {

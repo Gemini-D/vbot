@@ -44,6 +44,7 @@ class ContactFactory
 
     /**
      * fetch all contacts through api.
+     * @param mixed $seq
      */
     public function fetchAllContacts($seq = 0)
     {
@@ -68,6 +69,7 @@ class ContactFactory
 
     /**
      * create and save contacts to collections.
+     * @param mixed $memberList
      */
     public function store($memberList)
     {
@@ -111,6 +113,7 @@ class ContactFactory
 
     /**
      * store group members.
+     * @param mixed $array
      */
     private function storeMembers($array)
     {

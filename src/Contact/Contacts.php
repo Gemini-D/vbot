@@ -6,7 +6,7 @@ namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Support\Content;
-use Illuminate\Support\Collection;
+use Hyperf\Collection\Collection;
 
 class Contacts extends Collection
 {
@@ -31,6 +31,7 @@ class Contacts extends Collection
      * 根据昵称获取对象
      *
      * @param bool $blur
+     * @param mixed $nickname
      *
      * @return bool|string
      */
@@ -42,6 +43,8 @@ class Contacts extends Collection
     /**
      * 根据备注获取对象
      *
+     * @param mixed $remark
+     * @param mixed $blur
      * @return mixed
      */
     public function getUsernameByRemarkName($remark, $blur = false)
@@ -53,6 +56,8 @@ class Contacts extends Collection
      * 获取Username.
      *
      * @param bool $blur
+     * @param mixed $search
+     * @param mixed $key
      *
      * @return string
      */
@@ -78,6 +83,8 @@ class Contacts extends Collection
      * 获取整个数组.
      *
      * @param bool $blur
+     * @param mixed $search
+     * @param mixed $key
      *
      * @return mixed|static
      */
@@ -91,6 +98,7 @@ class Contacts extends Collection
     /**
      * 根据username获取账号.
      *
+     * @param mixed $username
      * @return mixed
      */
     public function getAccount($username)
@@ -137,6 +145,7 @@ class Contacts extends Collection
     /**
      * 处理联系人.
      *
+     * @param mixed $contact
      * @return mixed
      */
     public function format($contact)
@@ -160,6 +169,8 @@ class Contacts extends Collection
 
     /**
      * 通过接口更新群组信息.
+     * @param mixed $username
+     * @param mixed $list
      */
     public function update($username, $list): array
     {
