@@ -139,8 +139,6 @@ class Contacts extends Collection
     {
         $value = $this->format($value);
 
-        var_dump($value);
-
         return parent::put($key, $value);
     }
 

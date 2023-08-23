@@ -90,6 +90,10 @@ class Http
 
             $this->cookieJar->save($this->vbot->config['cookie_file']);
 
+            // if(str_contains($url, 'synccheck')){
+            //     var_dump($response, (string) $response->getBody());
+            // }
+
             return (string) $response->getBody();
         } catch (Exception $e) {
             $this->vbot->console->log($url . $e->getMessage(), Console::ERROR, true);
