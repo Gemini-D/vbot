@@ -12,6 +12,7 @@ use Hanson\Vbot\Exceptions\InitFailException;
 use Hanson\Vbot\Exceptions\LoginFailedException;
 use Hanson\Vbot\Exceptions\LoginTimeoutException;
 use Hanson\Vbot\Foundation\Vbot;
+use Throwable;
 
 class Server
 {
@@ -71,13 +72,15 @@ class Server
      */
     protected function getUuid()
     {
-        $content = $this->vbot->http->get('https://login.weixin.qq.com/jslogin', ['query' => [
-            'appid' => 'wx782c26e4c19acffb',
-            'fun' => 'new',
-            'lang' => 'zh_CN',
-            'redirect_uri' => 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?mod=desktop',
-            '_' => time(),
-        ]]);
+        $content = $this->vbot->http->get('https://login.weixin.qq.com/jslogin', [
+            'query' => [
+                'appid' => 'wx782c26e4c19acffb',
+                'fun' => 'new',
+                'lang' => 'zh_CN',
+                'redirect_uri' => 'https://wx.qq.com/cgi-bin/mmwebwx-bin/webwxnewloginpage?mod=desktop',
+                '_' => time(),
+            ],
+        ]);
 
         preg_match('/window.QRLogin.code = (\d+); window.QRLogin.uuid = \"(\S+?)\"/', $content, $matches);
 
@@ -219,21 +222,25 @@ class Server
     private function tryLogin(): bool
     {
         if (is_file($this->vbot->config['cookie_file']) && $this->vbot->cache->has($this->vbot->config['session_key'])) {
-            $configs = json_decode($this->vbot->cache->get($this->vbot->config['session_key']), true);
+            try {
+                $configs = json_decode($this->vbot->cache->get($this->vbot->config['session_key']), true);
 
-            $this->vbot->config['server'] = $configs;
-            $this->vbot->config['server.time'] = $this->vbot->config['server.time'] ?: Carbon::now()->toDateTimeString();
+                $this->vbot->config['server'] = $configs;
+                $this->vbot->config['server.time'] = $this->vbot->config['server.time'] ?: Carbon::now()->toDateTimeString();
 
-            if (! ($checkSync = $this->vbot->sync->checkSync())) {
-                return false;
-            }
+                if (! ($checkSync = $this->vbot->sync->checkSync())) {
+                    return false;
+                }
 
-            $result = $this->vbot->messageHandler->handleCheckSync($checkSync[0], $checkSync[1], true);
+                $result = $this->vbot->messageHandler->handleCheckSync($checkSync[0], $checkSync[1], true);
 
-            if ($result) {
-                $this->vbot->reLoginSuccessObserver->trigger();
+                if ($result) {
+                    $this->vbot->reLoginSuccessObserver->trigger();
 
-                return true;
+                    return true;
+                }
+            } catch (Throwable $exception) {
+                $this->vbot->log->error('try_login_failed' . $exception);
             }
         }
         $this->vbot->config['server.time'] = Carbon::now()->toDateTimeString();

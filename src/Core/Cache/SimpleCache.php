@@ -26,4 +26,9 @@ class SimpleCache
     {
         $this->cache->set($key, $data);
     }
+
+    public function get(string $key): mixed
+    {
+        return $this->cache->get($key);
+    }
 }
