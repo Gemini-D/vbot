@@ -155,7 +155,6 @@ class MessageHandler
             foreach ($message['AddMsgList'] as $msg) {
                 $collection = $this->vbot->messageFactory->make($msg);
                 if ($collection) {
-                    $this->cache($msg, $collection);
                     $this->console($collection);
                     if (! $this->vbot->messageExtension->exec($collection) && $this->handler) {
                         call_user_func_array($this->handler, [$collection]);
@@ -186,10 +185,5 @@ class MessageHandler
         if (count($message['ModContactList']) > 0) {
             $this->vbot->contactFactory->store($message['ModContactList']);
         }
-    }
-
-    private function cache($msg, Collection $collection)
-    {
-        // $this->vbot->cache->put('msg-' . $msg['MsgId'], $collection->toArray(), 2);
     }
 }

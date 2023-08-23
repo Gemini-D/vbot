@@ -4,10 +4,12 @@ declare(strict_types=1);
 
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
-use Hanson\Vbot\Core\Cache\MemCache;
+use Hanson\Vbot\Core\Cache\SimpleCache;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
 use Hyperf\Support\Filesystem\Filesystem;
 use Pimple\Container;
+
+use function Hyperf\Support\make;
 
 class CacheServiceProvider implements ServiceProviderInterface
 {
@@ -15,7 +17,7 @@ class CacheServiceProvider implements ServiceProviderInterface
     {
         $pimple['files'] = new Filesystem();
         $pimple['cache'] = function () {
-            return new MemCache();
+            return make(SimpleCache::class);
         };
     }
 }

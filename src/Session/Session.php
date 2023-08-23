@@ -25,10 +25,7 @@ class Session
 
     public function currentSession()
     {
-        $arguments = getopt('', ['session::']);
-
-        return isset($arguments['session']) && $arguments['session'] ? $arguments['session'] :
-            $this->vbot->config->get('session', $this->randomKey());
+        return $this->vbot->config->get('session', $this->randomKey());
     }
 
     public function has($session)

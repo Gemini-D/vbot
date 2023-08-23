@@ -36,7 +36,7 @@ use Psr\Log\LoggerInterface;
  * @property \Hanson\Vbot\Observers\FetchContactObserver $fetchContactObserver
  * @property \Hanson\Vbot\Observers\BeforeMessageObserver $beforeMessageObserver
  * @property \Hanson\Vbot\Core\Config\Repository $config
- * @property \Illuminate\Cache\Repository $cache
+ * @property \Hanson\Vbot\Core\Cache\MemCache $cache
  * @property \Hanson\Vbot\Contact\Myself $myself
  * @property \Hanson\Vbot\Contact\Friends $friends
  * @property \Hanson\Vbot\Contact\Contacts $contacts
@@ -102,6 +102,7 @@ class Vbot extends Container
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
         $default = [
             'path' => $path,
+            'session' => 'vbot',
             'download' => [
                 'emoticon_path' => $path . '/emoticon',
             ],

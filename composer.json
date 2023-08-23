@@ -15,12 +15,10 @@
             "email": "h@hanc.cc"
         }
     ],
-    "bin": [
-        "bin/vbot"
-    ],
     "require": {
         "aferrandini/phpqrcode": "^1.0",
         "guzzlehttp/guzzle": "^6.3|^7.0",
+        "hyperf/cache": "^3.0",
         "hyperf/collection": "^3.0",
         "hyperf/context": "^3.0",
         "hyperf/coordinator": "^3.0",
