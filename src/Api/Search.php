@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Api;
 
 class Search extends BaseApi
@@ -11,10 +13,10 @@ class Search extends BaseApi
 
     public function handle($params): array
     {
-        $class = '\\Hanson\\Vbot\\Contact\\'.ucfirst($params['type']);
+        $class = '\\Hanson\\Vbot\\Contact\\' . ucfirst($params['type']);
 
-        if (!class_exists($class)) {
-            return $this->response('Class: \''.$class.'\' not exist.', 500);
+        if (! class_exists($class)) {
+            return $this->response('Class: \'' . $class . '\' not exist.', 500);
         }
 
         if ($params['type'] === 'myself') {
@@ -25,10 +27,10 @@ class Search extends BaseApi
 
         if (isset($params['filter'])) {
             //            $contacts = (new Contacts($this->vbot->$type->toArray()));
-            $contacts = $this->vbot->$type;
+            $contacts = $this->vbot->{$type};
             $result = call_user_func_array([$contacts, $params['method']], $params['filter']);
         } else {
-            $result = $this->vbot->$type;
+            $result = $this->vbot->{$type};
         }
 
         return $this->response([$type => $result], 200);

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Message\Traits;
 
 use Hanson\Vbot\Core\ApiExceptionHandler;
@@ -10,12 +12,14 @@ use Hanson\Vbot\Message\Text;
  */
 trait SendAble
 {
+    abstract public static function send(...$args);
+
     protected static function sendMsg($msg)
     {
         $data = [
             'BaseRequest' => vbot('config')['server.baseRequest'],
-            'Msg'         => $msg,
-            'Scene'       => 0,
+            'Msg' => $msg,
+            'Scene' => 0,
         ];
 
         $result = vbot('http')->post(
@@ -33,7 +37,7 @@ trait SendAble
 
     private static function getUrl()
     {
-        return vbot('config')['server.uri.base'].'/'.static::API.'pass_ticket='.vbot('config')['server.passTicket'];
+        return vbot('config')['server.uri.base'] . '/' . static::API . 'pass_ticket=' . vbot('config')['server.passTicket'];
     }
 
     private static function stopSync()
@@ -42,6 +46,4 @@ trait SendAble
             Text::send('filehelper', 'stop sync');
         }
     }
-
-    abstract public static function send(...$args);
 }

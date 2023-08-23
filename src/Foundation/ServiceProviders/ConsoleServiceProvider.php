@@ -1,11 +1,12 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Console\Console;
 use Hanson\Vbot\Console\QrCode;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
 use Pimple\Container;
 
 class ConsoleServiceProvider implements ServiceProviderInterface

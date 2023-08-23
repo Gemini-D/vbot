@@ -1,13 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 use Hanson\Vbot\Foundation\Vbot;
 
-if (!function_exists('vbot')) {
+if (! function_exists('vbot')) {
     /**
      * Get the available container instance.
      *
      * @param string $abstract
-     * @param array  $parameters
      *
      * @return mixed|Vbot
      */

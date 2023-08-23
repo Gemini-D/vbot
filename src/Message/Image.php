@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HanSon
- * Date: 2017/1/10
- * Time: 16:51.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -15,10 +11,14 @@ class Image extends Message implements MessageInterface
 {
     use Multimedia;
     use SendAble;
-    const API = 'webwxsendmsgimg?fun=async&f=json&';
-    const DOWNLOAD_API = 'webwxgetmsgimg?&MsgID=';
-    const EXT = '.jpg';
-    const TYPE = 'image';
+
+    public const API = 'webwxsendmsgimg?fun=async&f=json&';
+
+    public const DOWNLOAD_API = 'webwxgetmsgimg?&MsgID=';
+
+    public const EXT = '.jpg';
+
+    public const TYPE = 'image';
 
     public function make($msg)
     {
@@ -27,28 +27,28 @@ class Image extends Message implements MessageInterface
         return $this->getCollection($msg, static::TYPE);
     }
 
-    protected function parseToContent(): string
-    {
-        return '[图片]';
-    }
-
     public static function send($username, $mix)
     {
         $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw']);
 
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             return false;
         }
 
         $response = static::uploadMedia($username, $file);
 
         return static::sendMsg([
-            'Type'         => 3,
-            'MediaId'      => $response['MediaId'],
+            'Type' => 3,
+            'MediaId' => $response['MediaId'],
             'FromUserName' => vbot('myself')->username,
-            'ToUserName'   => $username,
-            'LocalID'      => time() * 1e4,
-            'ClientMsgId'  => time() * 1e4,
+            'ToUserName' => $username,
+            'LocalID' => time() * 1e4,
+            'ClientMsgId' => time() * 1e4,
         ]);
+    }
+
+    protected function parseToContent(): string
+    {
+        return '[图片]';
     }
 }

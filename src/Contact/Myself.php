@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Support\Content;
@@ -30,18 +32,18 @@ class Myself
 
     private function log()
     {
-        vbot('console')->log('current user\'s nickname:'.$this->nickname);
-        vbot('console')->log('current user\'s username:'.$this->username);
-        vbot('console')->log('current user\'s uin:'.$this->uin);
+        vbot('console')->log('current user\'s nickname:' . $this->nickname);
+        vbot('console')->log('current user\'s username:' . $this->username);
+        vbot('console')->log('current user\'s uin:' . $this->uin);
     }
 
     private function setPath()
     {
         $path = vbot('config')['user_path'];
 
-        vbot('config')['user_path'] = $path.$this->uin.DIRECTORY_SEPARATOR;
+        vbot('config')['user_path'] = $path . $this->uin . DIRECTORY_SEPARATOR;
 
-        if (!is_dir(vbot('config')['user_path']) && $this->uin) {
+        if (! is_dir(vbot('config')['user_path']) && $this->uin) {
             mkdir(vbot('config')['user_path'], 0755, true);
         }
     }
@@ -49,14 +51,14 @@ class Myself
     private function setLog()
     {
         vbot('log')->pushHandler(new StreamHandler(
-            vbot('config')->get('log.system').DIRECTORY_SEPARATOR.$this->uin.DIRECTORY_SEPARATOR.'vbot.log',
+            vbot('config')->get('log.system') . DIRECTORY_SEPARATOR . $this->uin . DIRECTORY_SEPARATOR . 'vbot.log',
             vbot('config')->get('log.level'),
             true,
             vbot('config')->get('log.permission')
         ));
 
         vbot('messageLog')->pushHandler(new StreamHandler(
-            vbot('config')->get('log.message').DIRECTORY_SEPARATOR.$this->uin.DIRECTORY_SEPARATOR.'message.log',
+            vbot('config')->get('log.message') . DIRECTORY_SEPARATOR . $this->uin . DIRECTORY_SEPARATOR . 'message.log',
             vbot('config')->get('log.level'),
             true,
             vbot('config')->get('log.permission')

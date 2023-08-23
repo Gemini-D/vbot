@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Foundation\Vbot;
@@ -28,7 +30,6 @@ class Contacts extends Collection
     /**
      * 根据昵称获取对象
      *
-     * @param      $nickname
      * @param bool $blur
      *
      * @return bool|string
@@ -41,9 +42,6 @@ class Contacts extends Collection
     /**
      * 根据备注获取对象
      *
-     * @param $remark
-     * @param $blur
-     *
      * @return mixed
      */
     public function getUsernameByRemarkName($remark, $blur = false)
@@ -54,8 +52,6 @@ class Contacts extends Collection
     /**
      * 获取Username.
      *
-     * @param      $search
-     * @param      $key
      * @param bool $blur
      *
      * @return string
@@ -63,13 +59,14 @@ class Contacts extends Collection
     public function getUsername($search, $key, $blur = false)
     {
         return $this->search(function ($item) use ($search, $key, $blur) {
-            if (!isset($item[$key])) {
+            if (! isset($item[$key])) {
                 return false;
             }
 
             if ($blur && str_contains($item[$key], $search)) {
                 return true;
-            } elseif (!$blur && $item[$key] === $search) {
+            }
+            if (! $blur && $item[$key] === $search) {
                 return true;
             }
 
@@ -80,8 +77,6 @@ class Contacts extends Collection
     /**
      * 获取整个数组.
      *
-     * @param      $search
-     * @param      $key
      * @param bool $blur
      *
      * @return mixed|static
@@ -96,35 +91,32 @@ class Contacts extends Collection
     /**
      * 根据username获取账号.
      *
-     * @param $username
-     *
      * @return mixed
      */
     public function getAccount($username)
     {
         if (starts_with($username, '@@')) {
             return $this->vbot->groups->get($username);
-        } else {
-            $account = $this->vbot->friends->get($username, null);
-
-            $account = $account ?: $this->vbot->members->get($username, null);
-
-            $account = $account ?: $this->vbot->officials->get($username, null);
-
-            return $account ?: $this->vbot->specials->get($username, null);
         }
+        $account = $this->vbot->friends->get($username, null);
+
+        $account = $account ?: $this->vbot->members->get($username, null);
+
+        $account = $account ?: $this->vbot->officials->get($username, null);
+
+        return $account ?: $this->vbot->specials->get($username, null);
     }
 
     public function getAvatar($username)
     {
         $params = [
             'userName' => $username,
-            'type'     => 'big',
+            'type' => 'big',
         ];
 
         $api = $this->vbot->groups->isGroup($username) ? '/webwxgetheadimg' : '/webwxgeticon';
 
-        return $this->vbot->http->get($this->vbot->config['server.uri.base'].$api, ['query' => $params]);
+        return $this->vbot->http->get($this->vbot->config['server.uri.base'] . $api, ['query' => $params]);
     }
 
     /**
@@ -144,8 +136,6 @@ class Contacts extends Collection
 
     /**
      * 处理联系人.
-     *
-     * @param $contact
      *
      * @return mixed
      */
@@ -170,27 +160,22 @@ class Contacts extends Collection
 
     /**
      * 通过接口更新群组信息.
-     *
-     * @param $username
-     * @param $list
-     *
-     * @return array
      */
     public function update($username, $list): array
     {
         $usernames = is_string($username) ? [$username] : $username;
 
-        $url = $this->vbot->config['server.uri.base'].'/webwxbatchgetcontact?type=ex&r='.time();
+        $url = $this->vbot->config['server.uri.base'] . '/webwxbatchgetcontact?type=ex&r=' . time();
 
         $data = [
             'BaseRequest' => $this->vbot->config['server.baseRequest'],
-            'Count'       => count($usernames),
-            'List'        => $list,
+            'Count' => count($usernames),
+            'List' => $list,
         ];
 
         $response = $this->vbot->http->json($url, $data, true);
 
-        if (!$response) {
+        if (! $response) {
             return [];
         }
 

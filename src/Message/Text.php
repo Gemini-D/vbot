@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/16
- * Time: 18:33.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -14,8 +10,9 @@ class Text extends Message implements MessageInterface
 {
     use SendAble;
 
-    const TYPE = 'text';
-    const API = 'webwxsendmsg?';
+    public const TYPE = 'text';
+
+    public const API = 'webwxsendmsg?';
 
     private $isAt = false;
 
@@ -26,18 +23,34 @@ class Text extends Message implements MessageInterface
         return $this->getCollection($msg, static::TYPE);
     }
 
-    protected function afterCreate()
+    /**
+     * send a text message.
+     *
+     * @param $word string
+     * @param $username string
+     *
+     * @return bool|mixed
+     */
+    public static function send($username, $word)
     {
-        $this->isAt = str_contains($this->message, '@'.vbot('myself')->nickname);
-        $this->pure = $this->pureText();
+        if (! $word || ! $username) {
+            return false;
+        }
+
+        return static::sendMsg([
+            'Type' => 1,
+            'Content' => $word,
+            'FromUserName' => vbot('myself')->username,
+            'ToUserName' => $username,
+            'LocalID' => time() * 1e4,
+            'ClientMsgId' => time() * 1e4,
+        ]);
     }
 
-    private function pureText()
+    protected function afterCreate()
     {
-        $content = str_replace(' ', ' ', $this->message);
-        $isMatch = preg_match('/^@(.+?)\s([\s\S]*)/', $content, $match);
-
-        return $isMatch ? $match[2] : $this->message;
+        $this->isAt = str_contains($this->message, '@' . vbot('myself')->nickname);
+        $this->pure = $this->pureText();
     }
 
     protected function getExpand(): array
@@ -50,27 +63,11 @@ class Text extends Message implements MessageInterface
         return $this->message;
     }
 
-    /**
-     * send a text message.
-     *
-     * @param $word     string
-     * @param $username string
-     *
-     * @return bool|mixed
-     */
-    public static function send($username, $word)
+    private function pureText()
     {
-        if (!$word || !$username) {
-            return false;
-        }
+        $content = str_replace(' ', ' ', $this->message);
+        $isMatch = preg_match('/^@(.+?)\s([\s\S]*)/', $content, $match);
 
-        return static::sendMsg([
-            'Type'         => 1,
-            'Content'      => $word,
-            'FromUserName' => vbot('myself')->username,
-            'ToUserName'   => $username,
-            'LocalID'      => time() * 1e4,
-            'ClientMsgId'  => time() * 1e4,
-        ]);
+        return $isMatch ? $match[2] : $this->message;
     }
 }

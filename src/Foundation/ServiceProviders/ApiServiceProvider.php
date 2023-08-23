@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Api\ApiHandler;
 use Hanson\Vbot\Api\Search;
 use Hanson\Vbot\Api\Send;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
 use Pimple\Container;
 
 class ApiServiceProvider implements ServiceProviderInterface

@@ -1,7 +1,10 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Commands;
 
+use Exception;
 use Illuminate\Database\Capsule\Manager as Capsule;
 use Illuminate\Database\Schema\Blueprint;
 use Symfony\Component\Console\Command\Command as SymfonyCommand;
@@ -31,21 +34,21 @@ class MigrationCommand extends SymfonyCommand
     {
         $config = $input->getArgument('config');
 
-        if (!is_dir($config)) {
-            throw new \Exception('config path is not exist!');
+        if (! is_dir($config)) {
+            throw new Exception('config path is not exist!');
         }
 
         require $config;
 
         $this->capsule = new Capsule();
         $this->capsule->addConnection([
-            'driver'    => 'mysql',
-            'host'      => DB_HOST,
-            'port'      => DB_PORT,
-            'database'  => DB_NAME,
-            'username'  => DB_USER,
-            'password'  => DB_PASSWORD,
-            'charset'   => 'utf8mb4',
+            'driver' => 'mysql',
+            'host' => DB_HOST,
+            'port' => DB_PORT,
+            'database' => DB_NAME,
+            'username' => DB_USER,
+            'password' => DB_PASSWORD,
+            'charset' => 'utf8mb4',
             'collation' => 'utf8mb4_general_ci',
         ]);
 

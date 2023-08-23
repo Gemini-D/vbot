@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/9
- * Time: 21:13.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Support;
 
+use Exception;
 use GuzzleHttp\Client as HttpClient;
 use GuzzleHttp\Cookie\FileCookieJar;
 use Hanson\Vbot\Console\Console;
@@ -77,10 +74,9 @@ class Http
     }
 
     /**
-     * @param        $url
      * @param string $method
-     * @param array  $options
-     * @param bool   $retry
+     * @param array $options
+     * @param bool $retry
      *
      * @return string
      */
@@ -94,10 +90,10 @@ class Http
             $this->cookieJar->save($this->vbot->config['cookie_file']);
 
             return $response->getBody()->getContents();
-        } catch (\Exception $e) {
-            $this->vbot->console->log($url.$e->getMessage(), Console::ERROR, true);
+        } catch (Exception $e) {
+            $this->vbot->console->log($url . $e->getMessage(), Console::ERROR, true);
 
-            if (!$retry) {
+            if (! $retry) {
                 return $this->request($url, $method, $options, true);
             }
 

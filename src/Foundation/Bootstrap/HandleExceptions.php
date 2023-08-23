@@ -1,11 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\Bootstrap;
 
 use ErrorException;
 use Exception;
 use Hanson\Vbot\Foundation\Vbot;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Throwable;
 
 class HandleExceptions
 {
@@ -13,10 +16,6 @@ class HandleExceptions
 
     /**
      * Bootstrap the given application.
-     *
-     * @param Vbot $app
-     *
-     * @return void
      */
     public function bootstrap(Vbot $app)
     {
@@ -30,15 +29,13 @@ class HandleExceptions
     /**
      * Convert PHP errors to ErrorException instances.
      *
-     * @param int    $level
+     * @param int $level
      * @param string $message
      * @param string $file
-     * @param int    $line
-     * @param array  $context
+     * @param int $line
+     * @param array $context
      *
-     * @throws \ErrorException
-     *
-     * @return void
+     * @throws ErrorException
      */
     public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
@@ -54,13 +51,11 @@ class HandleExceptions
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable $e
-     *
-     * @return void
+     * @param Throwable $e
      */
     public function handleException($e)
     {
-        if (!$e instanceof Exception) {
+        if (! $e instanceof Exception) {
             $e = new FatalThrowableError($e);
         }
 

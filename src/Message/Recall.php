@@ -1,16 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: HanSon
- * Date: 2017/1/13
- * Time: 15:48.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
 class Recall extends Message implements MessageInterface
 {
-    const TYPE = 'recall';
+    public const TYPE = 'recall';
 
     private $nickname;
 
@@ -25,7 +21,7 @@ class Recall extends Message implements MessageInterface
     {
         $msgId = $this->parseMsgId($this->message);
 
-        $this->origin = vbot('cache')->get('msg-'.$msgId);
+        $this->origin = vbot('cache')->get('msg-' . $msgId);
 
         if ($this->origin) {
             $this->nickname = $this->origin['sender'] ?
@@ -39,10 +35,13 @@ class Recall extends Message implements MessageInterface
         return ['origin' => $this->origin, 'nickname' => $this->nickname];
     }
 
+    protected function parseToContent(): string
+    {
+        return $this->nickname . ' 刚撤回了消息';
+    }
+
     /**
      * 解析message获取msgId.
-     *
-     * @param $xml
      *
      * @return string msgId
      */
@@ -51,10 +50,5 @@ class Recall extends Message implements MessageInterface
         preg_match('/<msgid>(\d+)<\/msgid>/', $xml, $matches);
 
         return $matches[1];
-    }
-
-    protected function parseToContent(): string
-    {
-        return $this->nickname.' 刚撤回了消息';
     }
 }

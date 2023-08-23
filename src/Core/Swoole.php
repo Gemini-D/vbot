@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Core;
 
 use Hanson\Vbot\Foundation\Vbot;
@@ -43,15 +45,15 @@ class Swoole
         $data = json_encode($data);
 
         $headers = [
-            'Server'         => 'Swoole',
-            'Content-Type'   => 'application/json',
+            'Server' => 'Swoole',
+            'Content-Type' => 'application/json',
             'Content-Length' => strlen($data),
         ];
 
         $response[] = 'HTTP/1.1 200';
 
         foreach ($headers as $key => $val) {
-            $response[] = $key.':'.$val;
+            $response[] = $key . ':' . $val;
         }
 
         $response[] = '';

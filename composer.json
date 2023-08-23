@@ -15,12 +15,17 @@
             "email": "h@hanc.cc"
         }
     ],
-    "bin": ["bin/vbot"],
+    "bin": [
+        "bin/vbot"
+    ],
     "require": {
         "aferrandini/phpqrcode": "^1.0",
         "pimple/pimple": "^3.5",
         "hyperf/collection": "^3.0",
         "hyperf/coroutine": "^3.0"
+    },
+    "require-dev": {
+        "friendsofphp/php-cs-fixer": "^3.23"
     },
     "autoload": {
         "files": [
@@ -29,6 +34,9 @@
         "psr-4": {
             "Hanson\\Vbot\\": "src/"
         }
+    },
+    "scripts": {
+        "cs-fix": "php-cs-fixer fix $1"
     },
     "config": {
         "allow-plugins": {

@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/15
- * Time: 0:12.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -14,13 +10,19 @@ use Illuminate\Support\Collection;
 
 abstract class Message
 {
-    const FROM_TYPE_SYSTEM = 'System';
-    const FROM_TYPE_SELF = 'Self';
-    const FROM_TYPE_GROUP = 'Group';
-    const FROM_TYPE_FRIEND = 'Friend';
-    const FROM_TYPE_OFFICIAL = 'Official';
-    const FROM_TYPE_SPECIAL = 'Special';
-    const FROM_TYPE_UNKNOWN = 'Unknown';
+    public const FROM_TYPE_SYSTEM = 'System';
+
+    public const FROM_TYPE_SELF = 'Self';
+
+    public const FROM_TYPE_GROUP = 'Group';
+
+    public const FROM_TYPE_FRIEND = 'Friend';
+
+    public const FROM_TYPE_OFFICIAL = 'Official';
+
+    public const FROM_TYPE_SPECIAL = 'Special';
+
+    public const FROM_TYPE_UNKNOWN = 'Unknown';
 
     /**
      * @var array 消息来源
@@ -30,13 +32,11 @@ abstract class Message
     /**
      * @var array 当from为群组时，sender为用户发送�
      */
-    public $sender = null;
+    public $sender;
 
     /**
      * 发送�
      * username.
-     *
-     * @var
      */
     public $username;
 
@@ -63,6 +63,11 @@ abstract class Message
      */
     public $raw;
 
+    public function __toString()
+    {
+        return $this->content;
+    }
+
     protected function create($msg): array
     {
         $this->raw = $msg;
@@ -76,6 +81,31 @@ abstract class Message
         return ['raw' => $this->raw, 'from' => $this->from, 'fromType' => $this->fromType, 'sender' => $this->sender,
             'message' => $this->message, 'time' => $this->time, 'username' => $this->username, ];
     }
+
+    protected function getCollection($msg, $type)
+    {
+        $origin = $this->create($msg);
+
+        $this->afterCreate();
+
+        $result = array_merge($origin, [
+            'content' => $this->parseToContent(),
+            'type' => $type,
+        ], $this->getExpand());
+
+        return new Collection($result);
+    }
+
+    protected function afterCreate()
+    {
+    }
+
+    protected function getExpand(): array
+    {
+        return [];
+    }
+
+    abstract protected function parseToContent(): string;
 
     /**
      * 设置消息发送�
@@ -128,11 +158,11 @@ abstract class Message
     {
         $content = $this->message;
 
-        if (!$content || !str_contains($content, ":\n")) {
+        if (! $content || ! str_contains($content, ":\n")) {
             return;
         }
 
-        list($uid, $content) = explode(":\n", $content, 2);
+        [$uid, $content] = explode(":\n", $content, 2);
 
         $this->sender = vbot('contacts')->getAccount($uid) ?: vbot('groups')->getMemberByUsername($this->raw['FromUserName'], $uid);
         $this->message = Content::replaceBr($content);
@@ -141,35 +171,5 @@ abstract class Message
     private function setTime()
     {
         $this->time = Carbon::createFromTimestamp($this->raw['CreateTime']);
-    }
-
-    protected function getCollection($msg, $type)
-    {
-        $origin = $this->create($msg);
-
-        $this->afterCreate();
-
-        $result = array_merge($origin, [
-            'content' => $this->parseToContent(),
-            'type'    => $type,
-        ], $this->getExpand());
-
-        return new Collection($result);
-    }
-
-    protected function afterCreate()
-    {
-    }
-
-    protected function getExpand(): array
-    {
-        return [];
-    }
-
-    abstract protected function parseToContent(): string;
-
-    public function __toString()
-    {
-        return $this->content;
     }
 }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Console;
 
 use Hyperf\Collection\Arr;
@@ -13,13 +15,11 @@ class QrCode extends Console
     /**
      * show qrCode on console.
      *
-     * @param $text
-     *
      * @return bool
      */
     public function show($text)
     {
-        if (!Arr::get($this->config, 'qrcode', true)) {
+        if (! Arr::get($this->config, 'qrcode', true)) {
             return false;
         }
         $output = new ConsoleOutput();
@@ -35,7 +35,7 @@ class QrCode extends Console
         $output->write("\n");
         foreach ($text as $line) {
             $output->write($pxMap[0]);
-            for ($i = 0; $i < $length; $i++) {
+            for ($i = 0; $i < $length; ++$i) {
                 $type = substr($line, $i, 1);
                 $output->write($pxMap[$type]);
             }
@@ -45,8 +45,6 @@ class QrCode extends Console
 
     /**
      * init qrCode style.
-     *
-     * @param OutputInterface $output
      */
     private static function initQrcodeStyle(OutputInterface $output)
     {

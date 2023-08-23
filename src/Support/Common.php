@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Support;
 
 /**
@@ -30,7 +32,7 @@ class Common
      */
     public static function getMillisecond()
     {
-        list($t1, $t2) = explode(' ', microtime());
+        [$t1, $t2] = explode(' ', microtime());
 
         return (float) sprintf('%.0f', (floatval($t1) + floatval($t2)) * 1000);
     }
@@ -45,9 +47,9 @@ class Common
     public static function findWechatGroup($groupObj)
     {
         $result = [
-            'found'    => false,
+            'found' => false,
             'username' => '',
-            'message'  => '',
+            'message' => '',
         ];
 
         $nickName = $groupObj->nick_name;
@@ -63,13 +65,13 @@ class Common
             $firstMemberAttrMatch = false;
             $memberAttrsMatch = true;
 
-            //群昵称匹配
+            // 群昵称匹配
             if (str_contains($group['NickName'], $nickName)) {
                 $nickNameMatch = true;
             }
 
-            //拼音标识匹配
-            if ('' != $PYInitial) {
+            // 拼音标识匹配
+            if ($PYInitial != '') {
                 if (str_contains($group['PYInitial'], $PYInitial)) {
                     $PYInitialMatch = true;
                 }
@@ -84,8 +86,8 @@ class Common
              * 如果由于不检查成员导致的群名重复，在最后会由于匹配多于一条记录而报错，守住底线，保证程序不出错.
              */
             if (count($group['MemberList']) > 0) {
-                //首位群员标识不匹配
-                if ('' != $firstMemberAttr) {
+                // 首位群员标识不匹配
+                if ($firstMemberAttr != '') {
                     if ($firstMemberAttr == $group['MemberList'][0]['AttrStatus']) {
                         $firstMemberAttrMatch = true;
                     }
@@ -93,9 +95,9 @@ class Common
                     $firstMemberAttrMatch = true;
                 }
 
-                //没包含指定群员Attr
+                // 没包含指定群员Attr
                 foreach ($memberAttrs as $attr) {
-                    if (!self::isGroupMember($group['MemberList'], $attr)) {
+                    if (! self::isGroupMember($group['MemberList'], $attr)) {
                         $memberAttrsMatch = false;
                     }
                 }
@@ -104,22 +106,22 @@ class Common
                 $memberAttrsMatch = true;
             }
 
-            //所有
-            if ($nickNameMatch &&
-                $PYInitialMatch &&
-                $firstMemberAttrMatch &&
-                $memberAttrsMatch) {
+            // 所有
+            if ($nickNameMatch
+                && $PYInitialMatch
+                && $firstMemberAttrMatch
+                && $memberAttrsMatch) {
                 $matchGroup[] = $group['UserName'];
             }
         }
 
         if (count($matchGroup) > 1) {
-            //如果条件匹配出多个群，抛出异常
+            // 如果条件匹配出多个群，抛出异常
             $result['message'] = '[ERROR] not allow match more than one group';
         }
 
         $username = current($matchGroup);
-        if (false !== $username) {
+        if ($username !== false) {
             $result['found'] = true;
             $result['username'] = $username;
         } else {
@@ -139,9 +141,9 @@ class Common
     public static function findWechatFriend($memberObj)
     {
         $result = [
-            'found'    => false,
+            'found' => false,
             'username' => '',
-            'message'  => '',
+            'message' => '',
         ];
 
         $nickName = $memberObj->nick_name;
@@ -155,13 +157,13 @@ class Common
             $PYInitialMatch = false;
             $memberAttrMatch = false;
 
-            //昵称匹配
+            // 昵称匹配
             if (str_contains($friend['NickName'], $nickName)) {
                 $nickNameMatch = true;
             }
 
-            //拼音标识匹配
-            if ('' != $PYInitial) {
+            // 拼音标识匹配
+            if ($PYInitial != '') {
                 if (str_contains($friend['PYInitial'], $PYInitial)) {
                     $PYInitialMatch = true;
                 }
@@ -169,26 +171,26 @@ class Common
                 $PYInitialMatch = true;
             }
 
-            //Attr匹配
+            // Attr匹配
             if ($memberAttr == $friend['AttrStatus']) {
                 $memberAttrMatch = true;
             }
 
-            //所有
-            if ($nickNameMatch &&
-                $PYInitialMatch &&
-                $memberAttrMatch) {
+            // 所有
+            if ($nickNameMatch
+                && $PYInitialMatch
+                && $memberAttrMatch) {
                 $matchFriend[] = $friend['UserName'];
             }
         }
 
         if (count($matchFriend) > 1) {
-            //如果条件匹配出多个好友，抛出异常
+            // 如果条件匹配出多个好友，抛出异常
             $result['message'] = '[ERROR] not allow match more than one friend.';
         }
 
         $username = current($matchFriend);
-        if (false !== $username) {
+        if ($username !== false) {
             $result['found'] = true;
             $result['username'] = $username;
         } else {
@@ -196,25 +198,6 @@ class Common
         }
 
         return $result;
-    }
-
-    /**
-     * 是否群员.
-     *
-     * @param $memberList 群员列表
-     * @param $memberAttr 群员标识
-     *
-     * @return bool
-     */
-    private static function isGroupMember($memberList, $memberAttr)
-    {
-        foreach ($memberList as $member) {
-            if ($member['AttrStatus'] == $memberAttr) {
-                return true;
-            }
-        }
-
-        return false;
     }
 
     /**
@@ -231,7 +214,7 @@ class Common
 
         return [
             'successful' => true,
-            'message'    => '成功',
+            'message' => '成功',
         ];
     }
 
@@ -266,6 +249,25 @@ class Common
             }
 
             if (isset($source->apis[$targetId])) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * 是否群员.
+     *
+     * @param $memberList 群员列表
+     * @param $memberAttr 群员标识
+     *
+     * @return bool
+     */
+    private static function isGroupMember($memberList, $memberAttr)
+    {
+        foreach ($memberList as $member) {
+            if ($member['AttrStatus'] == $memberAttr) {
                 return true;
             }
         }

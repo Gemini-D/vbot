@@ -1,13 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Core\MessageFactory;
 use Hanson\Vbot\Core\MessageHandler;
 use Hanson\Vbot\Core\ShareFactory;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
-use Hanson\Vbot\Message\Text;
 use Pimple\Container;
 
 class MessageServiceProvider implements ServiceProviderInterface

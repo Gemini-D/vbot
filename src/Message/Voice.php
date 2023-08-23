@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/13
- * Time: 22:08.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -15,10 +11,14 @@ class Voice extends Message implements MessageInterface
 {
     use Multimedia;
     use SendAble;
-    const API = 'webwxsendappmsg?fun=async&f=json&';
-    const DOWNLOAD_API = 'webwxgetvoice?msgid=';
-    const EXT = '.mp3';
-    const TYPE = 'voice';
+
+    public const API = 'webwxsendappmsg?fun=async&f=json&';
+
+    public const DOWNLOAD_API = 'webwxgetvoice?msgid=';
+
+    public const EXT = '.mp3';
+
+    public const TYPE = 'voice';
 
     public function make($msg)
     {
@@ -27,16 +27,11 @@ class Voice extends Message implements MessageInterface
         return $this->getCollection($msg, static::TYPE);
     }
 
-    protected function parseToContent(): string
-    {
-        return '[语音]';
-    }
-
     public static function send($username, $mix)
     {
         $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw']);
 
-        if (!is_file($file)) {
+        if (! is_file($file)) {
             return false;
         }
 
@@ -45,12 +40,17 @@ class Voice extends Message implements MessageInterface
         $explode = explode('.', $file);
 
         return static::sendMsg([
-            'Type'         => 6,
-            'Content'      => sprintf("<appmsg appid='wxeb7ec651dd0aefa9' sdkver=''><title>%s</title><des></des><action></action><type>6</type><content></content><url></url><lowurl></lowurl><appattach><totallen>%s</totallen><attachid>%s</attachid><fileext>%s</fileext></appattach><extinfo></extinfo></appmsg>", basename($file), filesize($file), $response['MediaId'], end($explode)),
+            'Type' => 6,
+            'Content' => sprintf("<appmsg appid='wxeb7ec651dd0aefa9' sdkver=''><title>%s</title><des></des><action></action><type>6</type><content></content><url></url><lowurl></lowurl><appattach><totallen>%s</totallen><attachid>%s</attachid><fileext>%s</fileext></appattach><extinfo></extinfo></appmsg>", basename($file), filesize($file), $response['MediaId'], end($explode)),
             'FromUserName' => vbot('myself')->username,
-            'ToUserName'   => $username,
-            'LocalID'      => time() * 1e4,
-            'ClientMsgId'  => time() * 1e4,
+            'ToUserName' => $username,
+            'LocalID' => time() * 1e4,
+            'ClientMsgId' => time() * 1e4,
         ]);
+    }
+
+    protected function parseToContent(): string
+    {
+        return '[语音]';
     }
 }

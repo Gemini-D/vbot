@@ -1,16 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/15
- * Time: 12:29.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
 class RedPacket extends Message implements MessageInterface
 {
-    const TYPE = 'red_packet';
+    public const TYPE = 'red_packet';
 
     public function make($msg)
     {

@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/13
- * Time: 20:56.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Contact;
 
@@ -14,8 +10,6 @@ class Groups extends Contacts
 {
     /**
      * 判断是否群组.
-     *
-     * @param $userName
      *
      * @return bool
      */
@@ -27,7 +21,6 @@ class Groups extends Contacts
     /**
      * 根据群名筛选群组.
      *
-     * @param      $nickname
      * @param bool $blur
      *
      * @return static
@@ -39,9 +32,6 @@ class Groups extends Contacts
 
     /**
      * 根据username获取群成员.
-     *
-     * @param $username
-     * @param $memberUsername
      *
      * @return mixed
      */
@@ -63,8 +53,6 @@ class Groups extends Contacts
     /**
      * 根据昵称搜索群成员.
      *
-     * @param      $groupUsername
-     * @param      $memberNickname
      * @param bool $blur
      *
      * @return array|bool
@@ -73,7 +61,7 @@ class Groups extends Contacts
     {
         $group = $this->get($groupUsername);
 
-        if (!$group) {
+        if (! $group) {
             return false;
         }
 
@@ -82,7 +70,7 @@ class Groups extends Contacts
         foreach ($group['MemberList'] as $member) {
             if ($blur && str_contains($member['NickName'], $memberNickname)) {
                 $result[] = $member;
-            } elseif (!$blur && $member['NickName'] === $memberNickname) {
+            } elseif (! $blur && $member['NickName'] === $memberNickname) {
                 $result[] = $member;
             }
         }
@@ -93,8 +81,6 @@ class Groups extends Contacts
     /**
      * 创建群聊天.
      *
-     * @param array $contacts
-     *
      * @return bool
      */
     public function create(array $contacts)
@@ -103,8 +89,8 @@ class Groups extends Contacts
 
         $result = $this->vbot->http->json($url, [
             'MemberCount' => count($contacts),
-            'MemberList'  => $this->makeMemberList($contacts),
-            'Topic'       => '',
+            'MemberList' => $this->makeMemberList($contacts),
+            'Topic' => '',
             'BaseRequest' => $this->vbot->config['server.baseRequest'],
         ], true);
 
@@ -118,17 +104,14 @@ class Groups extends Contacts
     /**
      * 删除群成员.
      *
-     * @param $group
-     * @param $members
-     *
      * @return bool
      */
     public function deleteMember($group, $members)
     {
         $members = is_string($members) ? [$members] : $members;
         $result = $this->vbot->http->json(sprintf('%s/webwxupdatechatroom?fun=delmember&pass_ticket=%s', $this->vbot->config['server.uri.base'], $this->vbot->config['server.passTicket']), [
-            'BaseRequest'   => $this->vbot->config['server.baseRequest'],
-            'ChatRoomName'  => $group,
+            'BaseRequest' => $this->vbot->config['server.baseRequest'],
+            'ChatRoomName' => $group,
             'DelMemberList' => implode(',', $members),
         ], true);
 
@@ -138,30 +121,27 @@ class Groups extends Contacts
     /**
      * 添加群成员.
      *
-     * @param $groupUsername
-     * @param $members
-     *
      * @return bool
      */
     public function addMember($groupUsername, $members)
     {
-        if (!$groupUsername) {
+        if (! $groupUsername) {
             return false;
         }
         $group = $this->get($groupUsername);
 
-        if (!$group) {
+        if (! $group) {
             return false;
         }
 
         $groupCount = count($group['MemberList']);
-        list($fun, $key) = $groupCount > 40 ? ['invitemember', 'InviteMemberList'] : ['addmember', 'AddMemberList'];
+        [$fun, $key] = $groupCount > 40 ? ['invitemember', 'InviteMemberList'] : ['addmember', 'AddMemberList'];
         $members = is_string($members) ? [$members] : $members;
 
         $result = $this->vbot->http->json(sprintf('%s/webwxupdatechatroom?fun=%s&pass_ticket=%s', $this->vbot->config['server.uri.base'], $fun, $this->vbot->config['server.passTicket']), [
-            'BaseRequest'  => $this->vbot->config['server.baseRequest'],
+            'BaseRequest' => $this->vbot->config['server.baseRequest'],
             'ChatRoomName' => $groupUsername,
-            $key           => implode(',', $members),
+            $key => implode(',', $members),
         ], true);
 
         return $result['BaseResponse']['Ret'] == 0;
@@ -170,9 +150,6 @@ class Groups extends Contacts
     /**
      * 设置群名称.
      *
-     * @param $group
-     * @param $name
-     *
      * @return bool
      */
     public function setGroupName($group, $name)
@@ -180,9 +157,9 @@ class Groups extends Contacts
         $result = $this->vbot->http->post(
             sprintf('%s/webwxupdatechatroom?fun=modtopic&pass_ticket=%s', $this->vbot->config['server.uri.base'], $this->vbot->config['server.passTicket']),
             json_encode([
-                'BaseRequest'  => $this->vbot->config['server.baseRequest'],
+                'BaseRequest' => $this->vbot->config['server.baseRequest'],
                 'ChatRoomName' => $group,
-                'NewTopic'     => $name,
+                'NewTopic' => $name,
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             true
         );
@@ -193,21 +170,18 @@ class Groups extends Contacts
     /**
      * 增加群聊天到group.
      *
-     * @param $username
-     *
-     * @throws CreateGroupException
-     *
      * @return bool
+     * @throws CreateGroupException
      */
     public function add($username)
     {
         $result = $this->vbot->http->json(sprintf('%s/webwxbatchgetcontact?type=ex&r=%s&pass_ticket=%s', $this->vbot->config['server.uri.base'], time(), $this->vbot->config['server.passTicket']), [
-            'Count'       => 1,
+            'Count' => 1,
             'BaseRequest' => $this->vbot->config['server.baseRequest'],
-            'List'        => [
+            'List' => [
                 [
                     'ChatRoomId' => '',
-                    'UserName'   => $username,
+                    'UserName' => $username,
                 ],
             ],
         ], true);
@@ -223,11 +197,6 @@ class Groups extends Contacts
 
     /**
      * 更新群组.
-     *
-     * @param      $username
-     * @param null $list
-     *
-     * @return array
      */
     public function update($username, $list = null): array
     {
@@ -238,8 +207,6 @@ class Groups extends Contacts
 
     /**
      * 生成username list 格式.
-     *
-     * @param $username
      *
      * @return array
      */
@@ -252,24 +219,6 @@ class Groups extends Contacts
         }
 
         return $usernameList;
-    }
-
-    /**
-     * 生成member list 格式.
-     *
-     * @param $contacts
-     *
-     * @return array
-     */
-    private function makeMemberList($contacts)
-    {
-        $memberList = [];
-
-        foreach ($contacts as $contact) {
-            $memberList[] = ['UserName' => $contact];
-        }
-
-        return $memberList;
     }
 
     /**
@@ -293,7 +242,6 @@ class Groups extends Contacts
      * 修改群组获取，为空时更新群组.
      *
      * @param mixed $key
-     * @param null  $default
      *
      * @return mixed
      */
@@ -302,5 +250,21 @@ class Groups extends Contacts
         $group = parent::get($key);
 
         return $group ?: current($this->update($key));
+    }
+
+    /**
+     * 生成member list 格式.
+     *
+     * @return array
+     */
+    private function makeMemberList($contacts)
+    {
+        $memberList = [];
+
+        foreach ($contacts as $contact) {
+            $memberList[] = ['UserName' => $contact];
+        }
+
+        return $memberList;
     }
 }

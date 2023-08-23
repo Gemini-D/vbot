@@ -1,10 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation;
 
 use Hanson\Vbot\Session\Session;
 use Hyperf\Coordinator\Constants;
 use Hyperf\Coordinator\CoordinatorManager;
+
 use function Hyperf\Coroutine\go;
 
 class Kernel
@@ -36,7 +39,7 @@ class Kernel
         }
 
         if (version_compare(PHP_VERSION, '7.0.0', '<')) {
-            exit('Vbot have to run under php 7! Current version is :'.PHP_VERSION);
+            exit('Vbot have to run under php 7! Current version is :' . PHP_VERSION);
         }
 
         $mustExtensions = ['gd', 'fileinfo', 'SimpleXML'];
@@ -44,11 +47,11 @@ class Kernel
         $diff = array_diff($mustExtensions, get_loaded_extensions());
 
         if ($diff) {
-            exit('Running script failed! please install extensions: '.PHP_EOL.implode("\n", $diff).PHP_EOL);
+            exit('Running script failed! please install extensions: ' . PHP_EOL . implode("\n", $diff) . PHP_EOL);
         }
 
-        if ($this->vbot->config->get('swoole.status') && !in_array('swoole', get_loaded_extensions())) {
-            exit('Please install extension: swoole. Or you can turn it off in config.'.PHP_EOL);
+        if ($this->vbot->config->get('swoole.status') && ! in_array('swoole', get_loaded_extensions())) {
+            exit('Please install extension: swoole. Or you can turn it off in config.' . PHP_EOL);
         }
     }
 
@@ -64,12 +67,12 @@ class Kernel
         $sessionKey = $session->currentSession();
 
         $this->vbot->config['session'] = $sessionKey;
-        $this->vbot->config['session_key'] = 'session.'.$sessionKey;
+        $this->vbot->config['session_key'] = 'session.' . $sessionKey;
     }
 
     private function bootstrapException()
     {
-        go(function(){
+        go(function () {
             CoordinatorManager::until(Constants::WORKER_EXIT)->yield();
             $this->vbot->exception->handleShutdown();
         });
@@ -80,7 +83,7 @@ class Kernel
      */
     private function initializeConfig()
     {
-        if (!is_dir($this->vbot->config['path'])) {
+        if (! is_dir($this->vbot->config['path'])) {
             mkdir($this->vbot->config['path'], 0755, true);
         }
 
@@ -91,19 +94,19 @@ class Kernel
 
     private function initializePath()
     {
-        if (!is_dir($this->vbot->config['path'].'/cookies')) {
-            mkdir($this->vbot->config['path'].'/cookies', 0755, true);
+        if (! is_dir($this->vbot->config['path'] . '/cookies')) {
+            mkdir($this->vbot->config['path'] . '/cookies', 0755, true);
         }
 
-        if (!is_dir($this->vbot->config['path'].'/users')) {
-            mkdir($this->vbot->config['path'].'/users', 0755, true);
+        if (! is_dir($this->vbot->config['path'] . '/users')) {
+            mkdir($this->vbot->config['path'] . '/users', 0755, true);
         }
 
-        if (!is_dir($this->vbot->config['download.emoticon_path'])) {
+        if (! is_dir($this->vbot->config['download.emoticon_path'])) {
             mkdir($this->vbot->config['download.emoticon_path'], 0755, true);
         }
 
-        $this->vbot->config['cookie_file'] = $this->vbot->config['path'].'/cookies/'.$this->vbot->config['session'];
-        $this->vbot->config['user_path'] = $this->vbot->config['path'].'/users/';
+        $this->vbot->config['cookie_file'] = $this->vbot->config['path'] . '/cookies/' . $this->vbot->config['session'];
+        $this->vbot->config['user_path'] = $this->vbot->config['path'] . '/users/';
     }
 }

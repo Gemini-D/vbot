@@ -1,13 +1,10 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/15
- * Time: 12:29.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Core;
 
+use Exception;
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Message\File;
 use Hanson\Vbot\Message\Mina;
@@ -18,6 +15,7 @@ use Hanson\Vbot\Support\Content;
 class ShareFactory
 {
     public $type;
+
     /**
      * @var Vbot
      */
@@ -37,14 +35,15 @@ class ShareFactory
 
             if ($this->type == 6) {
                 return (new File())->make($msg);
-            } elseif ($this->vbot->officials->get($msg['FromUserName'])) {
-                return (new Official())->make($msg);
-            } elseif ($this->type == 33) {
-                return (new Mina())->make($msg);
-            } else {
-                return (new Share())->make($msg);
             }
-        } catch (\Exception $e) {
+            if ($this->vbot->officials->get($msg['FromUserName'])) {
+                return (new Official())->make($msg);
+            }
+            if ($this->type == 33) {
+                return (new Mina())->make($msg);
+            }
+            return (new Share())->make($msg);
+        } catch (Exception $e) {
             return;
         }
     }

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation;
 
 use Closure;
@@ -49,11 +51,8 @@ class ExceptionHandler
     /**
      * report while exception.
      *
-     * @param Exception $e
-     *
-     * @throws Exception
-     *
      * @return bool
+     * @throws Exception
      */
     public function report(Exception $e)
     {
@@ -67,31 +66,13 @@ class ExceptionHandler
     }
 
     /**
-     * Determine if the exception is in the "do not report" list.
-     *
-     * @param \Exception $e
-     *
-     * @return bool
-     */
-    protected function shouldntReport(Exception $e)
-    {
-        foreach ($this->dontReport as $type) {
-            return $e instanceof $type;
-        }
-
-        return false;
-    }
-
-    /**
      * set a exception handler.
-     *
-     * @param $closure
      *
      * @throws ArgumentException
      */
     public function setHandler($closure)
     {
-        if (!is_callable($closure)) {
+        if (! is_callable($closure)) {
             throw new ArgumentException('Argument must be callable.');
         }
 
@@ -101,14 +82,12 @@ class ExceptionHandler
     /**
      * Convert PHP errors to ErrorException instances.
      *
-     * @param int    $level
+     * @param int $level
      * @param string $message
      * @param string $file
-     * @param int    $line
+     * @param int $line
      *
-     * @throws \ErrorException
-     *
-     * @return void
+     * @throws ErrorException
      */
     public function handleError($level, $message, $file = '', $line = 0)
     {
@@ -120,11 +99,8 @@ class ExceptionHandler
     /**
      * Handle an uncaught exception from the application.
      *
-     * @param \Throwable $e
-     *
-     * @throws Throwable
-     *
      * @return bool
+     * @throws Throwable
      */
     public function handleException(Throwable $e)
     {
@@ -138,29 +114,11 @@ class ExceptionHandler
     }
 
     /**
-     * Exception that make vbot couldn 't work.
-     *
-     * @param Throwable $e
-     *
-     * @throws Throwable
-     */
-    private function throwFatalException(Throwable $e)
-    {
-        foreach ($this->fatalException as $exception) {
-            if ($e instanceof $exception) {
-                throw $e;
-            }
-        }
-    }
-
-    /**
      * Handle the PHP shutdown event.
-     *
-     * @return void
      */
     public function handleShutdown()
     {
-        if (!is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
+        if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             $this->handleException($this->fatalExceptionFromError($error, 0));
         }
 
@@ -168,10 +126,23 @@ class ExceptionHandler
     }
 
     /**
+     * Determine if the exception is in the "do not report" list.
+     *
+     * @return bool
+     */
+    protected function shouldntReport(Exception $e)
+    {
+        foreach ($this->dontReport as $type) {
+            return $e instanceof $type;
+        }
+
+        return false;
+    }
+
+    /**
      * Create a new fatal exception instance from an error array.
      *
-     * @param array    $error
-     * @param int|null $traceOffset
+     * @param null|int $traceOffset
      *
      * @return FatalErrorException
      */
@@ -197,5 +168,19 @@ class ExceptionHandler
     protected function isFatal($type)
     {
         return in_array($type, [E_COMPILE_ERROR, E_CORE_ERROR, E_ERROR, E_PARSE]);
+    }
+
+    /**
+     * Exception that make vbot couldn 't work.
+     *
+     * @throws Throwable
+     */
+    private function throwFatalException(Throwable $e)
+    {
+        foreach ($this->fatalException as $exception) {
+            if ($e instanceof $exception) {
+                throw $e;
+            }
+        }
     }
 }

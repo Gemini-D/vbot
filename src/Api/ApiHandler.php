@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Api;
 
 use Hanson\Vbot\Foundation\Vbot;
@@ -18,7 +20,7 @@ class ApiHandler
 
     public function handle($request)
     {
-        if (!($result = $this->validate($request))) {
+        if (! ($result = $this->validate($request))) {
             return;
         }
 
@@ -29,20 +31,20 @@ class ApiHandler
     {
         $request = explode("\r\n\r\n", $request);
 
-        if (!$request[1]) {
+        if (! $request[1]) {
             return false;
         }
 
         $data = json_decode($request[1], true);
 
-        if (!isset($data['action']) || !isset($data['params'])) {
+        if (! isset($data['action']) || ! isset($data['params'])) {
             return false;
         }
 
         $namespace = '\\Hanson\\Vbot\\Api\\';
 
-        if (class_exists($class = $namespace.ucfirst($data['action']))) {
-            return ['params' => $data['params'], 'class' => 'api'.ucfirst($data['action'])];
+        if (class_exists($class = $namespace . ucfirst($data['action']))) {
+            return ['params' => $data['params'], 'class' => 'api' . ucfirst($data['action'])];
         }
 
         return false;

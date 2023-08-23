@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Core;
 
 use Carbon\Carbon;
@@ -39,11 +41,11 @@ class MessageHandler
 
             $time = $this->heartbeat($time);
 
-            if (!($checkSync = $this->checkSync())) {
+            if (! ($checkSync = $this->checkSync())) {
                 continue;
             }
 
-            if (!$this->handleCheckSync($checkSync[0], $checkSync[1])) {
+            if (! $this->handleCheckSync($checkSync[0], $checkSync[1])) {
                 if ($server) {
                     $server->shutdown();
                 } else {
@@ -54,16 +56,68 @@ class MessageHandler
     }
 
     /**
-     * make a heartbeat every 30 minutes.
+     * handle a sync from wechat.
      *
-     * @param $time
+     * @param bool $test
+     *
+     * @return bool
+     */
+    public function handleCheckSync($retCode, $selector, $test = false)
+    {
+        if (in_array($retCode, [1100, 1101, 1102, 1205])) { // 微信客户端上登出或者其他设备登录
+            $this->vbot->console->log('vbot exit normally.');
+            $this->vbot->cache->forget('session.' . $this->vbot->config['session']);
+
+            return false;
+        }
+        if ($retCode != 0) {
+            $this->vbot->needActivateObserver->trigger();
+        } else {
+            if (! $test) {
+                $this->handleMessage($selector);
+            }
+
+            return true;
+        }
+    }
+
+    /**
+     * set a message handler.
+     *
+     * @throws ArgumentException
+     */
+    public function setHandler($callback)
+    {
+        if (! is_callable($callback)) {
+            throw new ArgumentException('Argument must be callable in ' . get_class());
+        }
+
+        $this->handler = $callback;
+    }
+
+    /**
+     * set a custom handler.
+     *
+     * @throws ArgumentException
+     */
+    public function setCustomHandler($callback)
+    {
+        if (! is_callable($callback)) {
+            throw new ArgumentException('Argument must be callable in ' . get_class());
+        }
+
+        $this->customHandler = $callback;
+    }
+
+    /**
+     * make a heartbeat every 30 minutes.
      *
      * @return int
      */
     private function heartbeat($time)
     {
         if (time() - $time > 1800) {
-            Text::send('filehelper', 'heart beat '.Carbon::now()->toDateTimeString());
+            Text::send('filehelper', 'heart beat ' . Carbon::now()->toDateTimeString());
 
             return time();
         }
@@ -77,36 +131,7 @@ class MessageHandler
     }
 
     /**
-     * handle a sync from wechat.
-     *
-     * @param      $retCode
-     * @param      $selector
-     * @param bool $test
-     *
-     * @return bool
-     */
-    public function handleCheckSync($retCode, $selector, $test = false)
-    {
-        if (in_array($retCode, [1100, 1101, 1102, 1205])) { // 微信客户端上登出或者其他设备登录
-            $this->vbot->console->log('vbot exit normally.');
-            $this->vbot->cache->forget('session.'.$this->vbot->config['session']);
-
-            return false;
-        } elseif ($retCode != 0) {
-            $this->vbot->needActivateObserver->trigger();
-        } else {
-            if (!$test) {
-                $this->handleMessage($selector);
-            }
-
-            return true;
-        }
-    }
-
-    /**
      * 处理消息.
-     *
-     * @param $selector
      */
     private function handleMessage($selector)
     {
@@ -126,7 +151,7 @@ class MessageHandler
                 if ($collection) {
                     $this->cache($msg, $collection);
                     $this->console($collection);
-                    if (!$this->vbot->messageExtension->exec($collection) && $this->handler) {
+                    if (! $this->vbot->messageExtension->exec($collection) && $this->handler) {
                         call_user_func_array($this->handler, [$collection]);
                     }
                 }
@@ -136,8 +161,6 @@ class MessageHandler
 
     /**
      * log the message.
-     *
-     * @param $message
      */
     private function log($message)
     {
@@ -160,38 +183,6 @@ class MessageHandler
 
     private function cache($msg, Collection $collection)
     {
-        $this->vbot->cache->put('msg-'.$msg['MsgId'], $collection->toArray(), 2);
-    }
-
-    /**
-     * set a message handler.
-     *
-     * @param $callback
-     *
-     * @throws ArgumentException
-     */
-    public function setHandler($callback)
-    {
-        if (!is_callable($callback)) {
-            throw new ArgumentException('Argument must be callable in '.get_class());
-        }
-
-        $this->handler = $callback;
-    }
-
-    /**
-     * set a custom handler.
-     *
-     * @param $callback
-     *
-     * @throws ArgumentException
-     */
-    public function setCustomHandler($callback)
-    {
-        if (!is_callable($callback)) {
-            throw new ArgumentException('Argument must be callable in '.get_class());
-        }
-
-        $this->customHandler = $callback;
+        $this->vbot->cache->put('msg-' . $msg['MsgId'], $collection->toArray(), 2);
     }
 }

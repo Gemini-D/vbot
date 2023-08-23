@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Session;
 
 use Hanson\Vbot\Foundation\Vbot;
@@ -31,6 +33,6 @@ class Session
 
     public function has($session)
     {
-        return $this->vbot->cache->has('session.'.$session);
+        return $this->vbot->cache->has('session.' . $session);
     }
 }

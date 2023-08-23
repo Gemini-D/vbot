@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Core\Config;
 
 use ArrayAccess;
@@ -16,9 +18,6 @@ class Repository implements ArrayAccess
 
     /**
      * Create a new configuration repository.
-     *
-     * @param array $items
-     * @return void
      */
     public function __construct(array $items = [])
     {
@@ -64,7 +63,7 @@ class Repository implements ArrayAccess
 
         foreach ($keys as $key => $default) {
             if (is_numeric($key)) {
-                list($key, $default) = [$default, null];
+                [$key, $default] = [$default, null];
             }
 
             $config[$key] = Arr::get($this->items, $key, $default);
@@ -78,7 +77,6 @@ class Repository implements ArrayAccess
      *
      * @param array|string $key
      * @param mixed $value
-     * @return void
      */
     public function set($key, $value = null)
     {
@@ -94,7 +92,6 @@ class Repository implements ArrayAccess
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function prepend($key, $value)
     {
@@ -110,7 +107,6 @@ class Repository implements ArrayAccess
      *
      * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function push($key, $value)
     {
@@ -133,9 +129,6 @@ class Repository implements ArrayAccess
 
     /**
      * Determine if the given configuration option exists.
-     *
-     * @param string $key
-     * @return bool
      */
     public function offsetExists(mixed $offset): bool
     {
@@ -144,9 +137,6 @@ class Repository implements ArrayAccess
 
     /**
      * Get a configuration option.
-     *
-     * @param string $key
-     * @return mixed
      */
     public function offsetGet(mixed $offset): mixed
     {
@@ -156,9 +146,7 @@ class Repository implements ArrayAccess
     /**
      * Set a configuration option.
      *
-     * @param string $key
      * @param mixed $value
-     * @return void
      */
     public function offsetSet(mixed $offset, $value): void
     {
@@ -167,9 +155,6 @@ class Repository implements ArrayAccess
 
     /**
      * Unset a configuration option.
-     *
-     * @param string $key
-     * @return void
      */
     public function offsetUnset(mixed $offset): void
     {

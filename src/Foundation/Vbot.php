@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/9
- * Time: 21:22.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Foundation;
 
@@ -80,16 +76,9 @@ class Vbot extends Container
         static::$instance = $this;
     }
 
-    private function initializeConfig(array $config)
+    public function __get(string $name)
     {
-        $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
-        $default = [
-            'path' => $path,
-            'download' => [
-                'emoticon_path' => $path . '/emoticon',
-            ]
-        ];
-        $this->config = new Repository(array_merge($default, $config));
+        return $this[$name];
     }
 
     /**
@@ -102,8 +91,15 @@ class Vbot extends Container
         }
     }
 
-    public function __get(string $name)
+    private function initializeConfig(array $config)
     {
-        return $this[$name];
+        $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
+        $default = [
+            'path' => $path,
+            'download' => [
+                'emoticon_path' => $path . '/emoticon',
+            ],
+        ];
+        $this->config = new Repository(array_merge($default, $config));
     }
 }

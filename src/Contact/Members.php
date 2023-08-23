@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2016/12/13
- * Time: 20:56.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Contact;
 

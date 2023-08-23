@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/15
- * Time: 12:29.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -13,7 +9,7 @@ namespace Hanson\Vbot\Message;
  */
 class Transfer extends Message implements MessageInterface
 {
-    const TYPE = 'transfer';
+    public const TYPE = 'transfer';
 
     /**
      * 转账金额 单位 �
@@ -25,8 +21,6 @@ class Transfer extends Message implements MessageInterface
 
     /**
      * 交易流水号.
-     *
-     * @var
      */
     private $transactionId;
 

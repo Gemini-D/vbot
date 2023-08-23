@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
@@ -11,15 +13,11 @@ class LogServiceProvider implements ServiceProviderInterface
     public function register(Vbot $pimple)
     {
         $pimple->singleton('log', function () {
-            $log = new Log('vbot');
-
-            return $log;
+            return new Log('vbot');
         });
 
         $pimple->singleton('messageLog', function () {
-            $log = new Log('message');
-
-            return $log;
+            return new Log('message');
         });
     }
 }

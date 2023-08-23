@@ -1,12 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Core\Server;
 use Hanson\Vbot\Core\Swoole;
 use Hanson\Vbot\Core\Sync;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
 use Pimple\Container;
 
 class ServerServiceProvider implements ServiceProviderInterface

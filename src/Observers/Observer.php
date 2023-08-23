@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Observers;
 
 use Hanson\Vbot\Exceptions\ArgumentException;
@@ -31,6 +33,17 @@ class Observer
         $this->vbot = $vbot;
     }
 
+    public function __call($method, $args)
+    {
+        $observerClass = lcfirst(str_replace('set', '', $method));
+
+        if (! $observer = $this->vbot->{$observerClass}) {
+            throw new ObserverNotFoundException("Observer: {$observerClass} not found.");
+        }
+
+        $observer->setCallback($args[0]);
+    }
+
     public function trigger()
     {
         $args = func_get_args();
@@ -42,8 +55,8 @@ class Observer
 
     protected function setCallback($callback)
     {
-        if (!is_callable($callback)) {
-            throw new ArgumentException('Argument #1 must be a callback in: '.get_class($this));
+        if (! is_callable($callback)) {
+            throw new ArgumentException('Argument #1 must be a callback in: ' . get_class($this));
         }
 
         $this->callback = $callback;
@@ -52,16 +65,5 @@ class Observer
     protected function getCallback()
     {
         return $this->callback;
-    }
-
-    public function __call($method, $args)
-    {
-        $observerClass = lcfirst(str_replace('set', '', $method));
-
-        if (!$observer = $this->vbot->{$observerClass}) {
-            throw new ObserverNotFoundException("Observer: {$observerClass} not found.");
-        }
-
-        $observer->setCallback($args[0]);
     }
 }

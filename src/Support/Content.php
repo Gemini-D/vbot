@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Administrator
- * Date: 2017/1/24
- * Time: 17:44.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Support;
 
@@ -15,7 +11,7 @@ namespace Hanson\Vbot\Support;
  */
 class Content
 {
-    const EMOJI_MAP = [
+    public const EMOJI_MAP = [
         '1f63c' => '1f601',
         '1f639' => '1f602',
         '1f63a' => '1f603',
@@ -29,8 +25,6 @@ class Content
 
     /**
      * format XML for Content.
-     *
-     * @param $content
      *
      * @return string
      */
@@ -54,8 +48,6 @@ class Content
 
     /**
      * 处理微信EMOJI.
-     *
-     * @param string $content
      *
      * @return mixed
      */

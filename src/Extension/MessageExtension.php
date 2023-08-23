@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Extension;
 
 use Hanson\Vbot\Exceptions\ExtensionException;
@@ -7,6 +9,13 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class MessageExtension
 {
+    /**
+     * 基础扩展.
+     *
+     * @var array
+     */
+    public $baseExtensions = [];
+
     /**
      * @var Vbot
      */
@@ -19,13 +28,6 @@ class MessageExtension
      */
     protected $serviceExtensions = [];
 
-    /**
-     * 基础扩展.
-     *
-     * @var array
-     */
-    public $baseExtensions = [];
-
     public function __construct(Vbot $vbot)
     {
         $this->vbot = $vbot;
@@ -34,13 +36,11 @@ class MessageExtension
     /**
      * 读取业务消息拓展.
      *
-     * @param $extensions
-     *
      * @throws ExtensionException
      */
     public function load($extensions)
     {
-        if (!is_array($extensions)) {
+        if (! is_array($extensions)) {
             throw new ExtensionException('extensions must pass an array.');
         }
 
@@ -73,6 +73,20 @@ class MessageExtension
     }
 
     /**
+     * 执行拓展.
+     *
+     * @return bool
+     */
+    public function exec($collection)
+    {
+        foreach ($this->serviceExtensions as $extension) {
+            if ($extension->messageHandler($collection)) {
+                return true;
+            }
+        }
+    }
+
+    /**
      * 初始化基础扩展.
      */
     private function initBaseExtensions()
@@ -87,32 +101,14 @@ class MessageExtension
     }
 
     /**
-     * 执行拓展.
-     *
-     * @param $collection
-     *
-     * @return bool
-     */
-    public function exec($collection)
-    {
-        foreach ($this->serviceExtensions as $extension) {
-            if ($extension->messageHandler($collection)) {
-                return true;
-            }
-        }
-    }
-
-    /**
      * 添加业务消息拓展.
-     *
-     * @param $extension
      *
      * @throws ExtensionException
      */
     private function addServiceExtension($extension)
     {
         if ($extension instanceof AbstractMessageHandler) {
-            throw new ExtensionException($extension.' is not extend AbstractMessageHandler');
+            throw new ExtensionException($extension . ' is not extend AbstractMessageHandler');
         }
 
         $this->serviceExtensions[] = $extension;

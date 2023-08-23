@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Core;
 
 use Hanson\Vbot\Foundation\Vbot;
 
 class ContactFactory
 {
-    const SPECIAL_USERS = ['newsapp', 'fmessage', 'filehelper', 'weibo', 'qqmail',
+    public const SPECIAL_USERS = ['newsapp', 'fmessage', 'filehelper', 'weibo', 'qqmail',
         'fmessage', 'tmessage', 'qmessage', 'qqsync', 'floatbottle',
         'lbsapp', 'shakeapp', 'medianote', 'qqfriend', 'readerapp',
         'blogapp', 'facebookapp', 'masssendapp', 'meishiapp',
@@ -32,23 +34,21 @@ class ContactFactory
         $this->fetchGroupMembers();
 
         $this->vbot->fetchContactObserver->trigger([
-            'friends'   => $this->vbot->friends,
-            'groups'    => $this->vbot->groups,
+            'friends' => $this->vbot->friends,
+            'groups' => $this->vbot->groups,
             'officials' => $this->vbot->officials,
-            'special'   => $this->vbot->specials,
-            'members'   => $this->vbot->members,
+            'special' => $this->vbot->specials,
+            'members' => $this->vbot->members,
         ]);
     }
 
     /**
      * fetch all contacts through api.
-     *
-     * @param $seq
      */
     public function fetchAllContacts($seq = 0)
     {
         $url = sprintf(
-            $this->vbot->config['server.uri.base'].'/webwxgetcontact?pass_ticket=%s&skey=%s&r=%s&seq=%s',
+            $this->vbot->config['server.uri.base'] . '/webwxgetcontact?pass_ticket=%s&skey=%s&r=%s&seq=%s',
             $this->vbot->config['server.passTicket'],
             $this->vbot->config['server.skey'],
             time(),
@@ -68,8 +68,6 @@ class ContactFactory
 
     /**
      * create and save contacts to collections.
-     *
-     * @param $memberList
      */
     public function store($memberList)
     {
@@ -92,7 +90,7 @@ class ContactFactory
     public function fetchGroupMembers()
     {
         $url = sprintf(
-            $this->vbot->config['server.uri.base'].'/webwxbatchgetcontact?type=ex&r=%s&pass_ticket=%s',
+            $this->vbot->config['server.uri.base'] . '/webwxbatchgetcontact?type=ex&r=%s&pass_ticket=%s',
             time(),
             $this->vbot->config['server.passTicket']
         );
@@ -104,8 +102,8 @@ class ContactFactory
 
         $content = $this->vbot->http->json($url, [
             'BaseRequest' => $this->vbot->config['server.baseRequest'],
-            'Count'       => $this->vbot->groups->count(),
-            'List'        => $list,
+            'Count' => $this->vbot->groups->count(),
+            'List' => $list,
         ], true, ['timeout' => 60]);
 
         $this->storeMembers($content);
@@ -113,8 +111,6 @@ class ContactFactory
 
     /**
      * store group members.
-     *
-     * @param $array
      */
     private function storeMembers($array)
     {

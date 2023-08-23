@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Extension;
 
 use Hanson\Vbot\Exceptions\ExtensionException;
@@ -24,8 +26,6 @@ abstract class AbstractMessageHandler
 
     /**
      * 拓展配置.
-     *
-     * @var
      */
     public $config;
 
@@ -34,7 +34,7 @@ abstract class AbstractMessageHandler
      */
     public function init()
     {
-        $this->config = vbot('config')->get('extension.'.$this->name);
+        $this->config = vbot('config')->get('extension.' . $this->name);
 
         $this->admin();
 
@@ -51,8 +51,6 @@ abstract class AbstractMessageHandler
     /**
      * 开发者需要实现的方法.
      *
-     * @param Collection $collection
-     *
      * @return mixed
      */
     abstract public function handler(Collection $collection);
@@ -60,18 +58,16 @@ abstract class AbstractMessageHandler
     /**
      * 消息处理器.
      *
-     * @param Collection $collection
-     *
      * @return mixed
      */
     final public function messageHandler(Collection $collection)
     {
         if ($collection['type'] === 'text' && $this->isAdmin($collection['username'])) {
-            if (starts_with($collection['content'], $this->name.' ')) {
-                $content = str_replace($this->name.' ', '', $collection['content']);
+            if (starts_with($collection['content'], $this->name . ' ')) {
+                $content = str_replace($this->name . ' ', '', $collection['content']);
 
                 switch ($content) {
-                    case  'info':
+                    case 'info':
                         $this->applicationInfo($collection);
                         break;
                     case 'on':
@@ -86,7 +82,7 @@ abstract class AbstractMessageHandler
             }
         }
 
-        if (!$this->status) {
+        if (! $this->status) {
             return false;
         }
 
@@ -104,9 +100,6 @@ abstract class AbstractMessageHandler
 
     /**
      * 设置拓展开关.
-     *
-     * @param bool $boolean
-     * @param      $collection
      */
     final public function setStatus(bool $boolean, $collection)
     {
@@ -130,17 +123,13 @@ abstract class AbstractMessageHandler
             static::$admin = vbot('friends')->getUsernameByRemarkName($remark);
         }
 
-        if (!$remark && ($nickname = vbot('config')->get('extension.admin.nickname'))) {
+        if (! $remark && ($nickname = vbot('config')->get('extension.admin.nickname'))) {
             static::$admin = vbot('friends')->getUsernameByNickname($nickname);
         }
     }
 
     /**
      * 判断是否管理员.
-     *
-     * @param $username
-     *
-     * @return bool
      */
     final public function isAdmin($username): bool
     {

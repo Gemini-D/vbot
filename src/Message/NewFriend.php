@@ -1,16 +1,12 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/2/12
- * Time: 20:44.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
 class NewFriend extends Message implements MessageInterface
 {
-    const TYPE = 'new_friend';
+    public const TYPE = 'new_friend';
 
     public function make($msg)
     {

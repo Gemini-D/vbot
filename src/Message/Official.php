@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/15
- * Time: 12:29.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -12,7 +8,7 @@ use Illuminate\Support\Arr;
 
 class Official extends Message implements MessageInterface
 {
-    const TYPE = 'official';
+    public const TYPE = 'official';
 
     private $title;
 
@@ -49,7 +45,7 @@ class Official extends Message implements MessageInterface
     protected function getExpand(): array
     {
         return ['title' => $this->title, 'description' => $this->description, 'app' => $this->app, 'url' => $this->url,
-            'articles'  => $this->articles, ];
+            'articles' => $this->articles, ];
     }
 
     protected function parseToContent(): string
@@ -67,7 +63,7 @@ class Official extends Message implements MessageInterface
                     $articles[] = [
                         'title' => (string) Arr::get((array) $article, 'title'),
                         'cover' => (string) Arr::get((array) $article, 'cover'),
-                        'url'   => (string) Arr::get((array) $article, 'url'),
+                        'url' => (string) Arr::get((array) $article, 'url'),
                     ];
                 }
             }

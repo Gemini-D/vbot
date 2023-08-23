@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Migrations;
 
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -9,6 +11,7 @@ class BaseMigration extends AbstractMigration
 {
     /** @var \Illuminate\Database\Capsule\Manager */
     public $capsule;
+
     /** @var \Illuminate\Database\Schema\Builder */
     public $schema;
 
@@ -16,13 +19,13 @@ class BaseMigration extends AbstractMigration
     {
         $this->capsule = new Capsule();
         $this->capsule->addConnection([
-            'driver'    => 'mysql',
-            'host'      => DB_HOST,
-            'port'      => DB_PORT,
-            'database'  => DB_NAME,
-            'username'  => DB_USER,
-            'password'  => DB_PASSWORD,
-            'charset'   => 'utf8',
+            'driver' => 'mysql',
+            'host' => DB_HOST,
+            'port' => DB_PORT,
+            'database' => DB_NAME,
+            'username' => DB_USER,
+            'password' => DB_PASSWORD,
+            'charset' => 'utf8',
             'collation' => 'utf8_unicode_ci',
         ]);
 

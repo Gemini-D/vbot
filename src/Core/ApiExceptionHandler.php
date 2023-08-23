@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Hanson\Vbot\Core;
 
 use Hanson\Vbot\Console\Console;
@@ -9,7 +11,7 @@ class ApiExceptionHandler
 {
     public static function handle($bag, $callback = null)
     {
-        if ($callback && !is_callable($callback)) {
+        if ($callback && ! is_callable($callback)) {
             throw new ArgumentException();
         }
 

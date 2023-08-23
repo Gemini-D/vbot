@@ -1,10 +1,6 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Hanson
- * Date: 2017/1/15
- * Time: 12:29.
- */
+
+declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
@@ -14,8 +10,9 @@ class Card extends Message implements MessageInterface
 {
     use SendAble;
 
-    const TYPE = 'card';
-    const API = 'webwxsendmsg?';
+    public const TYPE = 'card';
+
+    public const API = 'webwxsendmsg?';
 
     /**
      * @var array 推荐信息
@@ -50,11 +47,27 @@ class Card extends Message implements MessageInterface
         return $this->getCollection($msg, static::TYPE);
     }
 
+    public static function send($username, $alias, $nickname = null)
+    {
+        if (! $alias || ! $username) {
+            return false;
+        }
+
+        return static::sendMsg([
+            'Type' => 42,
+            'Content' => "<msg username='{$alias}' nickname='{$nickname}'/>",
+            'FromUserName' => vbot('myself')->username,
+            'ToUserName' => $username,
+            'LocalID' => time() * 1e4,
+            'ClientMsgId' => time() * 1e4,
+        ]);
+    }
+
     protected function getExpand(): array
     {
         return [
-            'info'        => $this->info, 'avatar' => $this->bigAvatar, 'small_avatar' => $this->smallAvatar,
-            'province'    => $this->province, 'city' => $this->city, 'description' => $this->description,
+            'info' => $this->info, 'avatar' => $this->bigAvatar, 'small_avatar' => $this->smallAvatar,
+            'province' => $this->province, 'city' => $this->city, 'description' => $this->description,
             'is_official' => $this->isOfficial,
         ];
     }
@@ -81,21 +94,5 @@ class Card extends Message implements MessageInterface
     protected function parseToContent(): string
     {
         return '[名片]';
-    }
-
-    public static function send($username, $alias, $nickname = null)
-    {
-        if (!$alias || !$username) {
-            return false;
-        }
-
-        return static::sendMsg([
-            'Type'         => 42,
-            'Content'      => "<msg username='$alias' nickname='$nickname'/>",
-            'FromUserName' => vbot('myself')->username,
-            'ToUserName'   => $username,
-            'LocalID'      => time() * 1e4,
-            'ClientMsgId'  => time() * 1e4,
-        ]);
     }
 }
