@@ -5,18 +5,20 @@ declare(strict_types=1);
 namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Support\Log;
+use Hyperf\Logger\LoggerFactory;
 use Pimple\Container;
+
+use function Hanson\Vbot\Support\app;
 
 class LogServiceProvider implements ServiceProviderInterface
 {
     public function register(Container $pimple)
     {
         $pimple['log'] = function () {
-            return new Log('vbot');
+            return app()->get(LoggerFactory::class)->get('vbot');
         };
         $pimple['messageLog'] = function () {
-            return new Log('message');
+            return app()->get(LoggerFactory::class)->get('vbot.message');
         };
     }
 }

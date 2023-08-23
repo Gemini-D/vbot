@@ -14,7 +14,6 @@ use Hanson\Vbot\Exceptions\ExtensionException;
 use Hanson\Vbot\Exceptions\FetchUuidException;
 use Hanson\Vbot\Exceptions\LoginFailedException;
 use Hanson\Vbot\Exceptions\LoginTimeoutException;
-use Symfony\Component\Debug\Exception\FatalErrorException;
 use Throwable;
 
 class ExceptionHandler
@@ -145,18 +144,11 @@ class ExceptionHandler
      *
      * @param null|int $traceOffset
      *
-     * @return FatalErrorException
+     * @return ErrorException
      */
     protected function fatalExceptionFromError(array $error, $traceOffset = null)
     {
-        return new FatalErrorException(
-            $error['message'],
-            $error['type'],
-            0,
-            $error['file'],
-            $error['line'],
-            $traceOffset
-        );
+        return new ErrorException($error['message'], filename: $error['file'], line: $error['line']);
     }
 
     /**

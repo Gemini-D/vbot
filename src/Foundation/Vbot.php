@@ -6,6 +6,7 @@ namespace Hanson\Vbot\Foundation;
 
 use Hanson\Vbot\Core\Config\Repository;
 use Pimple\Container;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class Vbot.ShareFactory.
@@ -20,8 +21,8 @@ use Pimple\Container;
  * @property \Hanson\Vbot\Core\Sync $sync
  * @property \Hanson\Vbot\Core\ContactFactory $contactFactory
  * @property \Hanson\Vbot\Foundation\ExceptionHandler $exception
- * @property \Hanson\Vbot\Support\Log $log
- * @property \Hanson\Vbot\Support\Log $messageLog
+ * @property LoggerInterface $log
+ * @property LoggerInterface $messageLog
  * @property \Hanson\Vbot\Support\Http $http
  * @property \Hanson\Vbot\Api\ApiHandler $api
  * @property \Hanson\Vbot\Console\QrCode $qrCode
