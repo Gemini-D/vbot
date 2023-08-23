@@ -11,16 +11,16 @@ use Hanson\Vbot\Message\Text;
 
 class MessageServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->singleton('messageHandler', function () use ($vbot) {
-            return new MessageHandler($vbot);
+        $pimple->singleton('messageHandler', function () use ($pimple) {
+            return new MessageHandler($pimple);
         });
-        $vbot->singleton('messageFactory', function () use ($vbot) {
-            return new MessageFactory($vbot);
+        $pimple->singleton('messageFactory', function () use ($pimple) {
+            return new MessageFactory($pimple);
         });
-        $vbot->singleton('shareFactory', function () use ($vbot) {
-            return new ShareFactory($vbot);
+        $pimple->singleton('shareFactory', function () use ($pimple) {
+            return new ShareFactory($pimple);
         });
 
         //        $vbot->bind('text', function () use ($vbot) {

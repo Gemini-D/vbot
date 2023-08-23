@@ -7,22 +7,23 @@ use Hanson\Vbot\Api\Search;
 use Hanson\Vbot\Api\Send;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
 use Hanson\Vbot\Foundation\Vbot;
+use Pimple\Container;
 
 class ApiServiceProvider implements ServiceProviderInterface
 {
     /**
-     * @param \Hanson\Vbot\Foundation\Vbot $vbot
+     * @param \Hanson\Vbot\Foundation\Vbot $pimple
      */
-    public function register(Vbot $vbot)
+    public function register(Container $pimple)
     {
-        $vbot->singleton('api', function () use ($vbot) {
-            return new ApiHandler($vbot);
+        $pimple->singleton('api', function () use ($pimple) {
+            return new ApiHandler($pimple);
         });
-        $vbot->singleton('apiSend', function () use ($vbot) {
-            return new Send($vbot);
+        $pimple->singleton('apiSend', function () use ($pimple) {
+            return new Send($pimple);
         });
-        $vbot->singleton('apiSearch', function () use ($vbot) {
-            return new Search($vbot);
+        $pimple->singleton('apiSearch', function () use ($pimple) {
+            return new Search($pimple);
         });
     }
 }

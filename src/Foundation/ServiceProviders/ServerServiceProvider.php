@@ -10,16 +10,16 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class ServerServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->singleton('server', function () use ($vbot) {
-            return new Server($vbot);
+        $pimple->singleton('server', function () use ($pimple) {
+            return new Server($pimple);
         });
-        $vbot->singleton('swoole', function () use ($vbot) {
-            return new Swoole($vbot);
+        $pimple->singleton('swoole', function () use ($pimple) {
+            return new Swoole($pimple);
         });
-        $vbot->singleton('sync', function () use ($vbot) {
-            return new Sync($vbot);
+        $pimple->singleton('sync', function () use ($pimple) {
+            return new Sync($pimple);
         });
     }
 }

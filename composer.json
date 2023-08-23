@@ -17,17 +17,9 @@
     ],
     "bin": ["bin/vbot"],
     "require": {
-        "guzzlehttp/guzzle": "^6.2",
-        "nesbot/carbon": "^1.21",
-        "symfony/console": "3.*",
-        "monolog/monolog": "^1.22",
         "aferrandini/phpqrcode": "^1.0",
-        "illuminate/config": "^5.4",
-        "illuminate/cache": "^5.4",
-        "illuminate/filesystem": "^5.4",
-        "illuminate/container": "^5.4",
-        "illuminate/redis": "^5.4",
-        "illuminate/database": "^5.4"
+        "pimple/pimple": "^3.5",
+        "hyperf/collection": "^3.0"
     },
     "autoload": {
         "files": [

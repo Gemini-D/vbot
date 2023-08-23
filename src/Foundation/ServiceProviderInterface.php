@@ -2,7 +2,6 @@
 
 namespace Hanson\Vbot\Foundation;
 
-interface ServiceProviderInterface
+interface ServiceProviderInterface extends \Pimple\ServiceProviderInterface
 {
-    public function register(Vbot $vbot);
 }

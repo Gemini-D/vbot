@@ -9,13 +9,13 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class ConsoleServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->bind('qrCode', function () use ($vbot) {
-            return new QrCode($vbot);
+        $pimple->bind('qrCode', function () use ($pimple) {
+            return new QrCode($pimple);
         });
-        $vbot->singleton('console', function () use ($vbot) {
-            return new Console($vbot);
+        $pimple->singleton('console', function () use ($pimple) {
+            return new Console($pimple);
         });
     }
 }

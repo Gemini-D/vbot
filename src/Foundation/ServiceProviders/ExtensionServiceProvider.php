@@ -8,10 +8,10 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class ExtensionServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->singleton('messageExtension', function () use ($vbot) {
-            return new MessageExtension($vbot);
+        $pimple->singleton('messageExtension', function () use ($pimple) {
+            return new MessageExtension($pimple);
         });
     }
 }

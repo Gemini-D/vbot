@@ -8,28 +8,29 @@ use Illuminate\Cache\CacheManager;
 use Illuminate\Cache\MemcachedConnector;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Redis\RedisManager;
+use Pimple\Container;
 
 class CacheServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Container $pimple)
     {
-        $vbot['files'] = new Filesystem();
+        $pimple['files'] = new Filesystem();
 
-        $vbot->singleton('cache', function ($vbot) {
+        $pimple->singleton('cache', function ($vbot) {
             return new CacheManager($vbot);
         });
-        $vbot->singleton('cache.store', function ($vbot) {
+        $pimple->singleton('cache.store', function ($vbot) {
             return $vbot['cache']->driver();
         });
-        $vbot->singleton('memcached.connector', function () {
+        $pimple->singleton('memcached.connector', function () {
             return new MemcachedConnector();
         });
-        $vbot->singleton('redis', function ($vbot) {
+        $pimple->singleton('redis', function ($vbot) {
             $config = $vbot->config['database.redis'];
 
             return new RedisManager(array_get($config, 'client', 'predis'), $config);
         });
-        $vbot->bind('redis.connection', function ($vbot) {
+        $pimple->bind('redis.connection', function ($vbot) {
             return $vbot['redis']->connection();
         });
     }

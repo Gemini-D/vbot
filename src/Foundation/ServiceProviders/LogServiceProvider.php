@@ -8,15 +8,15 @@ use Hanson\Vbot\Support\Log;
 
 class LogServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->singleton('log', function () {
+        $pimple->singleton('log', function () {
             $log = new Log('vbot');
 
             return $log;
         });
 
-        $vbot->singleton('messageLog', function () {
+        $pimple->singleton('messageLog', function () {
             $log = new Log('message');
 
             return $log;

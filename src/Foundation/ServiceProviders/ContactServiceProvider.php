@@ -15,31 +15,31 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class ContactServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $vbot)
+    public function register(Vbot $pimple)
     {
-        $vbot->bind('contactFactory', function () use ($vbot) {
-            return new ContactFactory($vbot);
+        $pimple->bind('contactFactory', function () use ($pimple) {
+            return new ContactFactory($pimple);
         });
-        $vbot->singleton('myself', function () {
+        $pimple->singleton('myself', function () {
             return new Myself();
         });
-        $vbot->singleton('friends', function () use ($vbot) {
-            return (new Friends())->setVbot($vbot);
+        $pimple->singleton('friends', function () use ($pimple) {
+            return (new Friends())->setVbot($pimple);
         });
-        $vbot->singleton('groups', function () use ($vbot) {
-            return (new Groups())->setVbot($vbot);
+        $pimple->singleton('groups', function () use ($pimple) {
+            return (new Groups())->setVbot($pimple);
         });
-        $vbot->singleton('members', function () use ($vbot) {
-            return (new Members())->setVbot($vbot);
+        $pimple->singleton('members', function () use ($pimple) {
+            return (new Members())->setVbot($pimple);
         });
-        $vbot->singleton('officials', function () use ($vbot) {
-            return (new Officials())->setVbot($vbot);
+        $pimple->singleton('officials', function () use ($pimple) {
+            return (new Officials())->setVbot($pimple);
         });
-        $vbot->singleton('specials', function () use ($vbot) {
-            return (new Specials())->setVbot($vbot);
+        $pimple->singleton('specials', function () use ($pimple) {
+            return (new Specials())->setVbot($pimple);
         });
-        $vbot->singleton('contacts', function () use ($vbot) {
-            return (new Contacts())->setVbot($vbot);
+        $pimple->singleton('contacts', function () use ($pimple) {
+            return (new Contacts())->setVbot($pimple);
         });
     }
 }
