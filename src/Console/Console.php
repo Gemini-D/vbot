@@ -7,7 +7,6 @@ namespace Hanson\Vbot\Console;
 use Carbon\Carbon;
 use Hanson\Vbot\Foundation\Vbot;
 use Hyperf\Collection\Arr;
-use Monolog\Logger;
 
 class Console
 {
@@ -58,7 +57,7 @@ class Console
     public function log($str, $level = 'INFO', $log = false)
     {
         if ($this->isOutput()) {
-            if ($log && in_array($level, array_keys(Logger::getLevels()))) {
+            if ($log) {
                 $this->vbot->log->log($level, $str);
             }
             echo '[' . Carbon::now()->toDateTimeString() . ']' . "[{$level}] " . $str . PHP_EOL;
@@ -71,7 +70,7 @@ class Console
      */
     public function message($str)
     {
-        if (array_get($this->config, 'message', true)) {
+        if (Arr::get($this->config, 'message', true)) {
             $this->log($str, self::MESSAGE);
         }
     }

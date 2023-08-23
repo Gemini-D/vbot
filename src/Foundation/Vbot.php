@@ -64,7 +64,7 @@ class Vbot extends Container
         ServiceProviders\MessageServiceProvider::class,
         ServiceProviders\ContactServiceProvider::class,
         ServiceProviders\ApiServiceProvider::class,
-        // ServiceProviders\ExtensionServiceProvider::class,
+        ServiceProviders\ExtensionServiceProvider::class,
     ];
 
     public function __construct(array $config)

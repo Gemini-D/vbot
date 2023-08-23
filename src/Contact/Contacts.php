@@ -103,7 +103,7 @@ class Contacts extends Collection
      */
     public function getAccount($username)
     {
-        if (starts_with($username, '@@')) {
+        if (str_starts_with($username, '@@')) {
             return $this->vbot->groups->get($username);
         }
         $account = $this->vbot->friends->get($username, null);
@@ -135,9 +135,11 @@ class Contacts extends Collection
      *
      * @return Collection
      */
-    public function put($key, $value)
+    public function put($key, $value): static
     {
         $value = $this->format($value);
+
+        var_dump($value);
 
         return parent::put($key, $value);
     }

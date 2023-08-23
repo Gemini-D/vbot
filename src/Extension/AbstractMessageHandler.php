@@ -63,7 +63,7 @@ abstract class AbstractMessageHandler
     final public function messageHandler(Collection $collection)
     {
         if ($collection['type'] === 'text' && $this->isAdmin($collection['username'])) {
-            if (starts_with($collection['content'], $this->name . ' ')) {
+            if (str_starts_with($collection['content'], $this->name . ' ')) {
                 $content = str_replace($this->name . ' ', '', $collection['content']);
 
                 switch ($content) {

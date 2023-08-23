@@ -50,7 +50,7 @@ class ShareFactory
 
     private function parse($xml)
     {
-        if (starts_with($xml, '@')) {
+        if (str_starts_with($xml, '@')) {
             $xml = preg_replace('/(@\S+:\\n)/', '', $xml);
         }
 

@@ -6,14 +6,14 @@ namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Extension\MessageExtension;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
-use Hanson\Vbot\Foundation\Vbot;
+use Pimple\Container;
 
 class ExtensionServiceProvider implements ServiceProviderInterface
 {
-    public function register(Vbot $pimple)
+    public function register(Container $pimple)
     {
-        $pimple->singleton('messageExtension', function () use ($pimple) {
+        $pimple['messageExtension'] = function () use ($pimple) {
             return new MessageExtension($pimple);
-        });
+        };
     }
 }

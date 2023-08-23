@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Hanson\Vbot\Support;
 
+use Hyperf\Collection\Arr;
+
 /**
  * Content 处理类.
  *
@@ -59,7 +61,7 @@ class Content
         preg_match_all('/<span class="emoji emoji(.{1,10})"><\/span>/', $content, $match);
 
         foreach ($match[1] as &$unicode) {
-            $unicode = array_get(self::EMOJI_MAP, $unicode, $unicode);
+            $unicode = Arr::get(self::EMOJI_MAP, $unicode, $unicode);
             $unicode = html_entity_decode("&#x{$unicode};");
         }
 

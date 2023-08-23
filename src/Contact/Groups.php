@@ -245,7 +245,7 @@ class Groups extends Contacts
      *
      * @return \Illuminate\Support\Collection
      */
-    public function put($key, $value)
+    public function put($key, $value): static
     {
         foreach ($value['MemberList'] as &$member) {
             $member = $this->format($member);

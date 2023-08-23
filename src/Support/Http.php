@@ -90,7 +90,7 @@ class Http
 
             $this->cookieJar->save($this->vbot->config['cookie_file']);
 
-            return $response->getBody()->getContents();
+            return (string) $response->getBody();
         } catch (Exception $e) {
             $this->vbot->console->log($url . $e->getMessage(), Console::ERROR, true);
 

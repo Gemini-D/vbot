@@ -20,8 +20,8 @@ class ServerServiceProvider implements ServiceProviderInterface
         // $pimple->singleton('swoole', function () use ($pimple) {
         //     return new Swoole($pimple);
         // });
-        // $pimple->singleton('sync', function () use ($pimple) {
-        //     return new Sync($pimple);
-        // });
+        $pimple['sync'] = function () use ($pimple) {
+            return new Sync($pimple);
+        };
     }
 }

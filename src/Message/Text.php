@@ -26,13 +26,11 @@ class Text extends Message implements MessageInterface
     /**
      * send a text message.
      *
-     * @param $word string
-     * @param $username string
-     *
      * @return bool|mixed
      */
-    public static function send($username, $word)
+    public static function send(...$args)
     {
+        [$username, $word] = $args;
         if (! $word || ! $username) {
             return false;
         }
