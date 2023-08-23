@@ -36,11 +36,7 @@ class MessageFactory
         $this->vbot = $vbot;
     }
 
-    /**
-     * @param mixed $msg
-     * @return Collection
-     */
-    public function make($msg)
+    public function make(mixed $msg):?Collection
     {
         switch ($msg['MsgType']) {
             case 1: // 文本消息
@@ -81,7 +77,7 @@ class MessageFactory
                     return (new Location())->make($msg);
                 }
                 if (str_contains($msg['Content'], '该类型暂不支持，请在手机上查看')) {
-                    return;
+                    return null;
                 }
                 return $this->vbot->shareFactory->make($msg);
             case 37: // 好友验证
@@ -103,5 +99,7 @@ class MessageFactory
                 // Unknown
                 break;
         }
+
+        return null;
     }
 }

@@ -18,7 +18,7 @@ class QrCode extends Console
      * @param mixed $text
      * @return bool
      */
-    public function show($text)
+    public function show($text): bool
     {
         if (! Arr::get($this->config, 'qrcode', true)) {
             return false;
@@ -42,6 +42,8 @@ class QrCode extends Console
             }
             $output->writeln($pxMap[0]);
         }
+
+        return true;
     }
 
     /**

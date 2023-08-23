@@ -53,7 +53,7 @@ class ExceptionHandler
      * @return bool
      * @throws Exception
      */
-    public function report(Exception $e)
+    public function report(Exception $e): bool
     {
         if ($this->shouldntReport($e)) {
             return true;
@@ -61,7 +61,10 @@ class ExceptionHandler
 
         if ($this->handler) {
             call_user_func_array($this->handler, [$e]);
+            return true;
         }
+
+        return false;
     }
 
     /**

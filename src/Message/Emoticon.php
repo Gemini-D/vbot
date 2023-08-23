@@ -52,13 +52,13 @@ class Emoticon extends Message implements MessageInterface
     }
 
     /**
-     * 从本地表�
+     * 从本地表�
      * 库随机发送一个.
      *
      * @param mixed $username
      * @return bool
      */
-    public static function sendRandom($username)
+    public static function sendRandom($username): bool
     {
         if (! is_dir($path = vbot('config')['download.emoticon_path'])) {
             vbot('console')->log('emoticon path not set.', Console::WARNING);
@@ -73,7 +73,10 @@ class Emoticon extends Message implements MessageInterface
             $msgId = $files[array_rand($files)];
 
             static::send($username, $path . DIRECTORY_SEPARATOR . $msgId);
+            return true;
         }
+
+        return false;
     }
 
     protected function parseToContent(): string

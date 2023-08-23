@@ -79,13 +79,15 @@ class MessageExtension
      * @param mixed $collection
      * @return bool
      */
-    public function exec($collection)
+    public function exec($collection): bool
     {
         foreach ($this->serviceExtensions as $extension) {
             if ($extension->messageHandler($collection)) {
                 return true;
             }
         }
+
+        return false;
     }
 
     /**

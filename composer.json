@@ -6,19 +6,25 @@
         "微信",
         "weixin",
         "微信机器人",
-        "机器人"
+        "机器人",
+        "Hyperf"
     ],
     "license": "MIT",
     "authors": [
         {
             "name": "HanSon",
             "email": "h@hanc.cc"
+        },
+        {
+            "name": "limingxinleo",
+            "email": "l@hyperf.io"
         }
     ],
     "require": {
         "aferrandini/phpqrcode": "^1.0",
         "guzzlehttp/guzzle": "^6.3|^7.0",
         "hyperf/cache": "^3.0",
+        "hyperf/codec": "^3.0",
         "hyperf/collection": "^3.0",
         "hyperf/context": "^3.0",
         "hyperf/coordinator": "^3.0",
@@ -43,7 +49,7 @@
     },
     "scripts": {
         "cs-fix": "php-cs-fixer fix $1",
-        "analyse": "phpstan analyse --memory-limit 512M -l 0 ./src"
+        "analyse": "phpstan analyse --memory-limit 512M -l 0 -c phpstan.neon ./src"
     },
     "config": {
         "optimize-autoloader": true,

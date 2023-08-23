@@ -6,6 +6,7 @@ namespace Hanson\Vbot\Message;
 
 use Carbon\Carbon;
 use Hanson\Vbot\Support\Content;
+use Hyperf\Codec\Json;
 use Hyperf\Collection\Collection;
 
 abstract class Message
@@ -65,7 +66,7 @@ abstract class Message
 
     public function __toString()
     {
-        return $this->content;
+        return Json::encode($this->raw);
     }
 
     protected function create($msg): array

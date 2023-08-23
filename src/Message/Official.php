@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace Hanson\Vbot\Message;
 
-use Illuminate\Support\Arr;
+use Hyperf\Collection\Arr;
 
 class Official extends Message implements MessageInterface
 {
