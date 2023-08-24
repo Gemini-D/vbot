@@ -16,7 +16,6 @@ class QrCode extends Console
      * show qrCode on console.
      *
      * @param mixed $text
-     * @return bool
      */
     public function show($text): bool
     {

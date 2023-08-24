@@ -221,7 +221,7 @@ class Server
      */
     private function tryLogin(): bool
     {
-        if (is_file($this->vbot->config['cookie_file']) && $this->vbot->cache->has($this->vbot->config['session_key'])) {
+        if ($this->vbot->cache->has($this->vbot->config['cookie_key']) && $this->vbot->cache->has($this->vbot->config['session_key'])) {
             try {
                 $configs = json_decode($this->vbot->cache->get($this->vbot->config['session_key']), true);
 
@@ -251,9 +251,7 @@ class Server
     private function cleanCookies()
     {
         $this->vbot->console->log('cleaning useless cookies.');
-        if (is_file($this->vbot->config['cookie_file'])) {
-            unlink($this->vbot->config['cookie_file']);
-        }
+        $this->vbot->cache->forget($this->vbot->config['cookie_key']);
     }
 
     /**

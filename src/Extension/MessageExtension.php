@@ -77,7 +77,6 @@ class MessageExtension
      * 执行拓展.
      *
      * @param mixed $collection
-     * @return bool
      */
     public function exec($collection): bool
     {

@@ -50,7 +50,6 @@ class ExceptionHandler
     /**
      * report while exception.
      *
-     * @return bool
      * @throws Exception
      */
     public function report(Exception $e): bool

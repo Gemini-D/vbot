@@ -106,7 +106,7 @@ class Kernel
             mkdir($this->vbot->config['download.emoticon_path'], 0755, true);
         }
 
-        $this->vbot->config['cookie_file'] = $this->vbot->config['path'] . '/cookies/' . $this->vbot->config['session'];
+        $this->vbot->config['cookie_key'] = 'cookies:' . $this->vbot->config['session'];
         $this->vbot->config['user_path'] = $this->vbot->config['path'] . '/users/';
     }
 }

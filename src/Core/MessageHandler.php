@@ -62,8 +62,6 @@ class MessageHandler
      * @param bool $test
      * @param mixed $retCode
      * @param mixed $selector
-     *
-     * @return bool
      */
     public function handleCheckSync($retCode, $selector, $test = false): bool
     {

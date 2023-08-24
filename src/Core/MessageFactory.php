@@ -36,7 +36,7 @@ class MessageFactory
         $this->vbot = $vbot;
     }
 
-    public function make(mixed $msg):?Collection
+    public function make(mixed $msg): ?Collection
     {
         switch ($msg['MsgType']) {
             case 1: // 文本消息

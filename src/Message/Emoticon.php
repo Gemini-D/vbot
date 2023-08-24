@@ -56,7 +56,6 @@ class Emoticon extends Message implements MessageInterface
      * 库随机发送一个.
      *
      * @param mixed $username
-     * @return bool
      */
     public static function sendRandom($username): bool
     {
