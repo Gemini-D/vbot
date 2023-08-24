@@ -7,7 +7,7 @@ namespace Hanson\Vbot\Support;
 use Exception;
 use GuzzleHttp\Client as HttpClient;
 use Hanson\Vbot\Console\Console;
-use Hanson\Vbot\Core\Http\RedisCookieJar;
+use Hanson\Vbot\Core\Http\CacheCookieJar;
 use Hanson\Vbot\Foundation\Vbot;
 
 class Http
@@ -16,11 +16,11 @@ class Http
 
     protected $client;
 
-    protected RedisCookieJar $cookieJar;
+    protected CacheCookieJar $cookieJar;
 
     public function __construct(protected Vbot $vbot)
     {
-        $this->cookieJar = new RedisCookieJar($vbot->config['cookie_key'], $vbot, true);
+        $this->cookieJar = new CacheCookieJar($vbot->config['cookie_key'], $vbot, true);
         $this->client = new HttpClient(['cookies' => $this->cookieJar]);
     }
 

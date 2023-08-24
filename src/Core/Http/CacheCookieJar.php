@@ -13,7 +13,7 @@ use RuntimeException;
 use function is_array;
 use function is_scalar;
 
-class RedisCookieJar extends CookieJar
+class CacheCookieJar extends CookieJar
 {
     /**
      * Create a new FileCookieJar object.
