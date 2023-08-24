@@ -66,6 +66,14 @@ class Server
     }
 
     /**
+     * store config to cache.
+     */
+    public function saveServer()
+    {
+        $this->vbot->cache->forever('session.' . $this->vbot->config['session'], json_encode($this->vbot->config['server']));
+    }
+
+    /**
      * get uuid.
      *
      * @throws Exception
@@ -201,6 +209,10 @@ class Server
 
     protected function generateSyncKey($result, $first)
     {
+        if ($this->vbot->config['server.syncKey']) {
+            return;
+        }
+
         $this->vbot->config['server.syncKey'] = $result['SyncKey'];
 
         $syncKey = [];
@@ -294,14 +306,6 @@ class Server
         ];
 
         $this->saveServer();
-    }
-
-    /**
-     * store config to cache.
-     */
-    private function saveServer()
-    {
-        $this->vbot->cache->forever('session.' . $this->vbot->config['session'], json_encode($this->vbot->config['server']));
     }
 
     /**

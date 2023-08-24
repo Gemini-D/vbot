@@ -169,6 +169,8 @@ class MessageHandler
                 }
             }
         }
+
+        $this->vbot->server->saveServer();
     }
 
     /**
