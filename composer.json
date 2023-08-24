@@ -58,5 +58,10 @@
         "allow-plugins": {
             "kylekatarnls/update-helper": true
         }
+    },
+    "extra": {
+        "branch-alias": {
+            "dev-master": "0.1-dev"
+        }
     }
 }
