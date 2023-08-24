@@ -26,14 +26,14 @@ abstract class Message
     public const FROM_TYPE_UNKNOWN = 'Unknown';
 
     /**
-     * @var array 消息来源
+     * @var ?array 消息来源
      */
-    public $from;
+    public ?array $from = null;
 
     /**
-     * @var array 当from为群组时，sender为用户发送�
+     * @var ?array 当from为群组时，sender为用户发送�
      */
-    public $sender;
+    public ?array $sender = null;
 
     /**
      * 发送�
@@ -148,7 +148,11 @@ abstract class Message
 
     private function setUsername()
     {
-        $this->username = $this->fromType === 'Group' ? $this->sender['UserName'] : $this->from['UserName'];
+        if ($this->fromType === 'Group' && $this->sender) {
+            $this->username = $this->sender['UserName'];
+        } elseif ($this->from) {
+            $this->username = $this->from['UserName'];
+        }
     }
 
     /**

@@ -37,14 +37,13 @@ class Groups extends Contacts
      *
      * @param mixed $username
      * @param mixed $memberUsername
-     * @return mixed
      */
-    public function getMemberByUsername($username, $memberUsername)
+    public function getMemberByUsername($username, $memberUsername): mixed
     {
         $members = $this->get($username)['MemberList'];
 
         if (count($members) === 0) {
-            return;
+            return null;
         }
 
         foreach ($members as $member) {
@@ -52,6 +51,8 @@ class Groups extends Contacts
                 return $member;
             }
         }
+
+        return null;
     }
 
     /**
