@@ -12,8 +12,6 @@ use Hanson\Vbot\Message\Text;
  */
 trait SendAble
 {
-    abstract public static function send(...$args);
-
     protected static function sendMsg($msg)
     {
         $data = [
