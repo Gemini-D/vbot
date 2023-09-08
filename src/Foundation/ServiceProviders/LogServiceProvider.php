@@ -18,7 +18,7 @@ class LogServiceProvider implements ServiceProviderInterface
             return app()->get(LoggerFactory::class)->get('vbot');
         };
         $pimple['messageLog'] = function () {
-            return app()->get(LoggerFactory::class)->get('vbot.message');
+            return app()->get(LoggerFactory::class)->get('vbot_message');
         };
     }
 }
