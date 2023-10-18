@@ -146,7 +146,7 @@ class Groups extends Contacts
         }
 
         $groupCount = count($group['MemberList']);
-        [$fun, $key] = $groupCount > 40 ? ['invitemember', 'InviteMemberList'] : ['addmember', 'AddMemberList'];
+        [$fun, $key] = $groupCount > 20 ? ['invitemember', 'InviteMemberList'] : ['addmember', 'AddMemberList'];
         $members = is_string($members) ? [$members] : $members;
 
         $result = $this->vbot->http->json(sprintf('%s/webwxupdatechatroom?fun=%s&pass_ticket=%s', $this->vbot->config['server.uri.base'], $fun, $this->vbot->config['server.passTicket']), [
