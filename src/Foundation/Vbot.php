@@ -47,8 +47,6 @@ use Psr\Log\LoggerInterface;
  */
 class Vbot extends Container
 {
-    public static $instance;
-
     /**
      * Service Providers.
      *
@@ -68,23 +66,18 @@ class Vbot extends Container
         ServiceProviders\ExtensionServiceProvider::class,
     ];
 
-    public function __construct(array $config)
+    public function __construct(array $config, protected int|string $id = 0)
     {
         $this->initializeConfig($config);
 
         (new Kernel($this))->bootstrap();
 
-        static::$instance = $this;
+        VbotFactory::set($id, $this);
     }
 
     public function __get(string $name)
     {
         return $this[$name];
-    }
-
-    public static function getInstance()
-    {
-        return self::$instance;
     }
 
     /**

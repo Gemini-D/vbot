@@ -3,6 +3,7 @@
 declare(strict_types=1);
 
 use Hanson\Vbot\Foundation\Vbot;
+use Hanson\Vbot\Foundation\VbotFactory;
 
 if (! function_exists('vbot')) {
     /**
@@ -12,12 +13,12 @@ if (! function_exists('vbot')) {
      *
      * @return mixed|Vbot
      */
-    function vbot($abstract = null)
+    function vbot($abstract = null, int|string $id = 0)
     {
         if (is_null($abstract)) {
-            return Vbot::getInstance();
+            return VbotFactory::get($id);
         }
 
-        return Vbot::getInstance()[$abstract];
+        return VbotFactory::get($id)[$abstract];
     }
 }
