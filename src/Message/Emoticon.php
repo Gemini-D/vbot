@@ -24,8 +24,8 @@ class Emoticon extends Message implements MessageInterface
 
     public function make($msg, int|string $id = 0)
     {
-        static::autoDownload($msg);
-        static::downloadToLibrary($msg);
+        static::autoDownload($msg, id: $id);
+        static::downloadToLibrary($msg, $id);
 
         return $this->getCollection($msg, static::TYPE, $id);
     }
@@ -44,7 +44,7 @@ class Emoticon extends Message implements MessageInterface
             'Type' => 47,
             'EmojiFlag' => 2,
             'MediaId' => $response['MediaId'],
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
@@ -83,33 +83,33 @@ class Emoticon extends Message implements MessageInterface
         return '[表情]';
     }
 
-    private static function downloadToLibrary($message)
+    private static function downloadToLibrary($message, int|string $id = 0)
     {
-        if (! vbot('config')['download.emoticon_path']) {
+        if (! vbot('config', $id)['download.emoticon_path']) {
             return false;
         }
 
-        if (is_file($path = vbot('config')['user_path'] . static::TYPE . DIRECTORY_SEPARATOR . $message['MsgId'] . static::EXT)) {
-            static::copyFromEmoticon($path);
+        if (is_file($path = vbot('config', $id)['user_path'] . static::TYPE . DIRECTORY_SEPARATOR . $message['MsgId'] . static::EXT)) {
+            static::copyFromEmoticon($path, $id);
         } else {
             static::saveFromApi($message);
         }
     }
 
-    private static function copyFromEmoticon($path)
+    private static function copyFromEmoticon($path, int|string $id = 0)
     {
-        $target = vbot('config')['download.emoticon_path'] . DIRECTORY_SEPARATOR;
+        $target = vbot('config', $id)['download.emoticon_path'] . DIRECTORY_SEPARATOR;
 
-        if (! static::isExist($md5 = md5_file($path))) {
+        if (! static::isExist($md5 = md5_file($path), $id)) {
             copy($path, $target . $md5 . static::EXT);
         }
     }
 
-    private static function saveFromApi($message)
+    private static function saveFromApi($message, int|string $id = 0)
     {
-        $target = vbot('config')['download.emoticon_path'] . DIRECTORY_SEPARATOR;
+        $target = vbot('config', $id)['download.emoticon_path'] . DIRECTORY_SEPARATOR;
 
-        $resource = static::getResource($message);
+        $resource = static::getResource($message, $id);
 
         $fileName = $target . 'tmp-' . time() . rand() . static::EXT;
 
@@ -120,8 +120,8 @@ class Emoticon extends Message implements MessageInterface
         unlink($fileName);
     }
 
-    private static function isExist($md5)
+    private static function isExist($md5, int|string $id = 0)
     {
-        return is_file(vbot('config')['download.emoticon_path'] . DIRECTORY_SEPARATOR . $md5 . static::EXT);
+        return is_file(vbot('config', $id)['download.emoticon_path'] . DIRECTORY_SEPARATOR . $md5 . static::EXT);
     }
 }

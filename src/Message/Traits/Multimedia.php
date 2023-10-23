@@ -179,7 +179,7 @@ trait Multimedia
             $resource = static::getResource($message, $id);
 
             if ($resource) {
-                File::saveTo(vbot('config')['user_path'] . static::TYPE . DIRECTORY_SEPARATOR .
+                File::saveTo(vbot('config', $id)['user_path'] . static::TYPE . DIRECTORY_SEPARATOR .
                     static::fileName($message), $resource);
             }
         }
@@ -208,7 +208,7 @@ trait Multimedia
         $content = vbot('http', $id)->get($url, static::getDownloadOption($message, $id));
 
         if (! $content) {
-            vbot('console')->log('download file failed.', Console::WARNING);
+            vbot('console', $id)->log('download file failed.', Console::WARNING);
         } else {
             return $content;
         }

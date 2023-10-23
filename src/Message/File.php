@@ -62,9 +62,9 @@ class File extends Message implements MessageInterface
         $this->title = $info['title'];
     }
 
-    protected static function getDownloadUrl($message)
+    protected static function getDownloadUrl($message, int|string $id = 0)
     {
-        $serverConfig = vbot('config')['server'];
+        $serverConfig = vbot('config', $id)['server'];
 
         return $serverConfig['uri']['file'] . DIRECTORY_SEPARATOR . static::DOWNLOAD_API;
     }

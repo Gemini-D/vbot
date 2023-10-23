@@ -40,7 +40,7 @@ class Video extends Message implements MessageInterface
         return static::sendMsg([
             'Type' => 43,
             'MediaId' => $response['MediaId'],
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,

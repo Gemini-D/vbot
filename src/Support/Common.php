@@ -44,7 +44,7 @@ class Common
      *
      * @return array
      */
-    public static function findWechatGroup($groupObj)
+    public static function findWechatGroup($groupObj, int|string $id = 0)
     {
         $result = [
             'found' => false,
@@ -58,7 +58,7 @@ class Common
         $memberAttrs = $groupObj->member_attrs;
 
         $matchGroup = [];
-        $groups = vbot('groups')->all();
+        $groups = vbot('groups', $id)->all();
         foreach ($groups as $group) {
             $nickNameMatch = false;
             $PYInitialMatch = false;
@@ -138,7 +138,7 @@ class Common
      *
      * @return array
      */
-    public static function findWechatFriend($memberObj)
+    public static function findWechatFriend($memberObj, int|string $id = 0)
     {
         $result = [
             'found' => false,
@@ -151,7 +151,7 @@ class Common
         $memberAttr = $memberObj->first_member_attr;
 
         $matchFriend = [];
-        $friends = vbot('friends')->all();
+        $friends = vbot('friends', $id)->all();
         foreach ($friends as $friend) {
             $nickNameMatch = false;
             $PYInitialMatch = false;
@@ -205,12 +205,12 @@ class Common
      *
      * @param $contactType 联系人类型 groups/friends
      */
-    public static function dumpContacts($contactType)
+    public static function dumpContacts($contactType, int|string $id = 0)
     {
-        $uin = vbot('myself')->uin;
+        $uin = vbot('myself', $id)->uin;
         $time = date('YmdHis', time());
-        file_put_contents("{$contactType}_{$uin}_{$time}.txt", print_r(vbot($contactType)->all(), true));
-        vbot('console')->log('dump file success.');
+        file_put_contents("{$contactType}_{$uin}_{$time}.txt", print_r(vbot($contactType, $id)->all(), true));
+        vbot('console', $id)->log('dump file success.');
 
         return [
             'successful' => true,
@@ -225,9 +225,9 @@ class Common
      *
      * @return bool
      */
-    public static function isActivitySource($sourceId)
+    public static function isActivitySource($sourceId, int|string $id = 0)
     {
-        $distribute = vbot('config')['distribute'];
+        $distribute = vbot('config', $id)['distribute'];
 
         return isset($distribute[$sourceId]);
     }
@@ -239,9 +239,9 @@ class Common
      *
      * @return bool
      */
-    public static function isActivityTarget($targetId)
+    public static function isActivityTarget($targetId, int|string $id = 0)
     {
-        $distribute = vbot('config')['distribute'];
+        $distribute = vbot('config', $id)['distribute'];
 
         foreach ($distribute as $sid => $source) {
             if (isset($source->targets[$targetId])) {
