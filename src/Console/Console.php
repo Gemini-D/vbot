@@ -25,7 +25,7 @@ class Console
 
     public function __construct(protected Vbot $vbot)
     {
-        $this->config = $this->vbot->config['console'];
+        $this->config = $this->vbot->config['console'] ?? [];
     }
 
     /**
