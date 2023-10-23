@@ -14,12 +14,12 @@ class GroupChange extends Message implements MessageInterface
 
     public $invited;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         if (str_contains($this->message, '邀请你')) {
             $this->action = 'INVITE';

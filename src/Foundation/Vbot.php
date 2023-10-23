@@ -80,6 +80,11 @@ class Vbot extends Container
         return $this[$name];
     }
 
+    public function getId(): int|string
+    {
+        return $this->id;
+    }
+
     /**
      * Register providers.
      */

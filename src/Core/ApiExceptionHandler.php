@@ -9,7 +9,7 @@ use Hanson\Vbot\Exceptions\ArgumentException;
 
 class ApiExceptionHandler
 {
-    public static function handle($bag, $callback = null)
+    public static function handle($bag, $callback = null, int|string $id = 0)
     {
         if ($callback && ! is_callable($callback)) {
             throw new ArgumentException();
@@ -23,22 +23,20 @@ class ApiExceptionHandler
 
         switch ($bag['BaseResponse']['Ret']) {
             case 1:
-                vbot('console')->log('Argument pass error.', Console::WARNING);
+                vbot('console', $id)->log('Argument pass error.', Console::WARNING, ['id' => $id]);
                 break;
             case -14:
-                vbot('console')->log('Ticket error.', Console::WARNING);
-                break;
-            case 1100:
-                vbot('console')->log('Logout.', Console::WARNING);
+                vbot('console', $id)->log('Ticket error.', Console::WARNING, ['id' => $id]);
                 break;
             case 1101:
-                vbot('console')->log('Logout.', Console::WARNING);
+            case 1100:
+                vbot('console', $id)->log('Logout.', Console::WARNING, ['id' => $id]);
                 break;
             case 1102:
-                vbot('console')->log('Cookies invalid.', Console::WARNING);
+                vbot('console', $id)->log('Cookies invalid.', Console::WARNING, ['id' => $id]);
                 break;
             case 1105:
-                vbot('console')->log('Api frequency.', Console::WARNING);
+                vbot('console', $id)->log('Api frequency.', Console::WARNING, ['id' => $id]);
                 break;
         }
 

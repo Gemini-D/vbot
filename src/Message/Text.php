@@ -18,9 +18,9 @@ class Text extends Message implements MessageInterface
 
     private $pure;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
     /**
@@ -30,7 +30,7 @@ class Text extends Message implements MessageInterface
      * @param mixed $word
      * @return bool|mixed
      */
-    public static function send($username, $word)
+    public static function send(int|string $id, $username, $word)
     {
         if (! $word || ! $username) {
             return false;
@@ -39,16 +39,16 @@ class Text extends Message implements MessageInterface
         return static::sendMsg([
             'Type' => 1,
             'Content' => $word,
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
-        ]);
+        ], $id);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
-        $this->isAt = str_contains($this->message, '@' . vbot('myself')->nickname);
+        $this->isAt = str_contains($this->message, '@' . vbot('myself', $id)->nickname);
         $this->pure = $this->pureText();
     }
 

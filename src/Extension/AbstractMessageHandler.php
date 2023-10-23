@@ -14,6 +14,8 @@ abstract class AbstractMessageHandler
 
     public $author = 'HanSon';
 
+    public int|string $id = 0;
+
     public $name;
 
     public $zhName;
@@ -32,9 +34,11 @@ abstract class AbstractMessageHandler
     /**
      * 初始化拓展.
      */
-    public function init()
+    public function init(int|string $id = 0)
     {
-        $this->config = vbot('config')->get('extension.' . $this->name);
+        $this->id = $id;
+
+        $this->config = vbot('config', $id)->get('extension.' . $this->name);
 
         $this->admin();
 
@@ -68,7 +72,7 @@ abstract class AbstractMessageHandler
 
                 switch ($content) {
                     case 'info':
-                        $this->applicationInfo($collection);
+                        $this->applicationInfo($this->id, $collection);
                         break;
                     case 'on':
                         $this->setStatus(true, $collection);
@@ -89,13 +93,13 @@ abstract class AbstractMessageHandler
         return $this->handler($collection);
     }
 
-    final public function applicationInfo($collection)
+    final public function applicationInfo(int|string $id, $collection)
     {
         $status = $this->status ? '开' : '关';
 
         $admin = static::$admin;
 
-        Text::send($collection['from']['UserName'], "当前应用名称：{$this->zhName}\n名称：{$this->name}\n状态：{$status}\n版本：{$this->version}\n作者：{$this->author}\n管理员 Username：{$admin}");
+        Text::send($id, $collection['from']['UserName'], "当前应用名称：{$this->zhName}\n名称：{$this->name}\n状态：{$status}\n版本：{$this->version}\n作者：{$this->author}\n管理员 Username：{$admin}");
     }
 
     /**
@@ -108,7 +112,7 @@ abstract class AbstractMessageHandler
 
         $status = $this->status ? '开' : '关';
 
-        Text::send($collection['from']['UserName'], "应用：{$this->zhName} 状态已更改为：{$status}");
+        Text::send($this->id, $collection['from']['UserName'], "应用：{$this->zhName} 状态已更改为：{$status}");
     }
 
     /**
@@ -118,14 +122,14 @@ abstract class AbstractMessageHandler
      */
     final public function admin()
     {
-        $remark = vbot('config')->get('extension.admin.remark');
+        $remark = vbot('config', $this->id)->get('extension.admin.remark');
 
         if ($remark) {
-            static::$admin = vbot('friends')->getUsernameByRemarkName($remark);
+            static::$admin = vbot('friends', $this->id)->getUsernameByRemarkName($remark);
         }
 
-        if (! $remark && ($nickname = vbot('config')->get('extension.admin.nickname'))) {
-            static::$admin = vbot('friends')->getUsernameByNickname($nickname);
+        if (! $remark && ($nickname = vbot('config', $this->id)->get('extension.admin.nickname'))) {
+            static::$admin = vbot('friends', $this->id)->getUsernameByNickname($nickname);
         }
     }
 
@@ -135,6 +139,6 @@ abstract class AbstractMessageHandler
      */
     final public function isAdmin($username): bool
     {
-        return $username === static::$admin || $username === vbot('myself')->username;
+        return $username === static::$admin || $username === vbot('myself', $this->id)->username;
     }
 }

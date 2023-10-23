@@ -22,23 +22,23 @@ class Emoticon extends Message implements MessageInterface
 
     public const TYPE = 'emoticon';
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
         static::autoDownload($msg);
         static::downloadToLibrary($msg);
 
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    public static function send($username, $mix)
+    public static function send(int|string $id, $username, $mix)
     {
-        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw']);
+        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw'], $id);
 
         if (! is_file($file)) {
             return false;
         }
 
-        $response = static::uploadMedia($username, $file);
+        $response = static::uploadMedia($id, $username, $file);
 
         return static::sendMsg([
             'Type' => 47,
@@ -48,7 +48,7 @@ class Emoticon extends Message implements MessageInterface
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
-        ]);
+        ], $id);
     }
 
     /**
@@ -57,10 +57,10 @@ class Emoticon extends Message implements MessageInterface
      *
      * @param mixed $username
      */
-    public static function sendRandom($username): bool
+    public static function sendRandom($username, int|string $id = 0): bool
     {
-        if (! is_dir($path = vbot('config')['download.emoticon_path'])) {
-            vbot('console')->log('emoticon path not set.', Console::WARNING);
+        if (! is_dir($path = vbot('config', $id)['download.emoticon_path'])) {
+            vbot('console', $id)->log('emoticon path not set.', Console::WARNING);
 
             return false;
         }
@@ -71,7 +71,7 @@ class Emoticon extends Message implements MessageInterface
         if (count($files)) {
             $msgId = $files[array_rand($files)];
 
-            static::send($username, $path . DIRECTORY_SEPARATOR . $msgId);
+            static::send($username, $path . DIRECTORY_SEPARATOR . $msgId, $id);
             return true;
         }
 

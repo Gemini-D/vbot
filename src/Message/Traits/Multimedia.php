@@ -44,13 +44,13 @@ trait Multimedia
      * @param mixed $file
      * @return bool|mixed|string
      */
-    public static function uploadVideo($username, $file)
+    public static function uploadVideo($username, $file, int|string $id = 0)
     {
         if (! is_file($file)) {
             return false;
         }
 
-        $url = vbot('config')['server.uri.file'] . '/webwxuploadmedia?f=json';
+        $url = vbot('config', $id)['server.uri.file'] . '/webwxuploadmedia?f=json';
 
         static::$file = $file;
         [$mime, $mediaType] = static::getMediaType($file);
@@ -73,25 +73,25 @@ trait Multimedia
                 'chunk' => $chunk,
                 'mediatype' => $mediaType,
                 'uploadmediarequest' => json_encode([
-                    'BaseRequest' => vbot('config')['server.baseRequest'],
+                    'BaseRequest' => vbot('config', $id)['server.baseRequest'],
                     'ClientMediaId' => $clientMediaId,
                     'TotalLen' => $fileSize,
                     'StartPos' => 0,
                     'DataLen' => $fileSize,
                     'MediaType' => 4,
                     'UploadType' => 2,
-                    'FromUserName' => vbot('myself')->username,
+                    'FromUserName' => vbot('myself', $id)->username,
                     'ToUserName' => $username,
                     'FileMd5' => md5_file($file),
                 ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-                'webwx_data_ticket' => static::getTicket(),
-                'pass_ticket' => vbot('config')['server.passTicket'],
+                'webwx_data_ticket' => static::getTicket($id),
+                'pass_ticket' => vbot('config', $id)['server.passTicket'],
                 'filename' => fread($fp, $streamLen),
             ];
 
             $data = static::dataToMultipart($data);
 
-            $result = vbot('http')->request($url, 'post', [
+            $result = vbot('http', $id)->request($url, 'post', [
                 'multipart' => $data,
             ]);
             $result = json_decode($result, true);
@@ -100,7 +100,7 @@ trait Multimedia
         }
         fclose($fp);
 
-        return ApiExceptionHandler::handle($result);
+        return ApiExceptionHandler::handle($result, id: $id);
     }
 
     /**
@@ -108,13 +108,13 @@ trait Multimedia
      * @param mixed $file
      * @return bool|mixed|string
      */
-    public static function uploadMedia($username, $file)
+    public static function uploadMedia(int|string $id, $username, $file)
     {
         if (! is_file($file)) {
             return false;
         }
 
-        $url = vbot('config')['server.uri.file'] . '/webwxuploadmedia?f=json';
+        $url = vbot('config', $id)['server.uri.file'] . '/webwxuploadmedia?f=json';
 
         static::$file = $file;
         [$mime, $mediaType] = static::getMediaType($file);
@@ -127,40 +127,40 @@ trait Multimedia
             'size' => filesize($file),
             'mediatype' => $mediaType,
             'uploadmediarequest' => json_encode([
-                'BaseRequest' => vbot('config')['server.baseRequest'],
+                'BaseRequest' => vbot('config', $id)['server.baseRequest'],
                 'ClientMediaId' => time(),
                 'TotalLen' => filesize($file),
                 'StartPos' => 0,
                 'DataLen' => filesize($file),
                 'MediaType' => 4,
                 'UploadType' => 2,
-                'FromUserName' => vbot('myself')->username,
+                'FromUserName' => vbot('myself', $id)->username,
                 'ToUserName' => $username,
                 'FileMd5' => md5_file($file),
             ], JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
-            'webwx_data_ticket' => static::getTicket(),
-            'pass_ticket' => vbot('config')['server.passTicket'],
+            'webwx_data_ticket' => static::getTicket($id),
+            'pass_ticket' => vbot('config', $id)['server.passTicket'],
             'filename' => fopen($file, 'r'),
         ];
 
         $data = static::dataToMultipart($data);
 
-        $result = vbot('http')->request($url, 'post', [
+        $result = vbot('http', $id)->request($url, 'post', [
             'multipart' => $data,
         ]);
         $result = json_decode($result, true);
 
-        return ApiExceptionHandler::handle($result);
+        return ApiExceptionHandler::handle($result, id: $id);
     }
 
-    protected static function getDownloadUrl($message)
+    protected static function getDownloadUrl($message, int|string $id = 0)
     {
-        $serverConfig = vbot('config')['server'];
+        $serverConfig = vbot('config', $id)['server'];
 
         return $serverConfig['uri']['base'] . DIRECTORY_SEPARATOR . static::DOWNLOAD_API . "{$message['MsgId']}&skey={$serverConfig['skey']}";
     }
 
-    protected static function getDownloadOption($message)
+    protected static function getDownloadOption($message, int|string $id = 0)
     {
         return [];
     }
@@ -171,12 +171,12 @@ trait Multimedia
      * @param bool $force
      * @param mixed $message
      */
-    protected static function autoDownload($message, $force = false)
+    protected static function autoDownload($message, $force = false, int|string $id = 0)
     {
-        $isDownload = vbot('config')['download.' . static::TYPE];
+        $isDownload = vbot('config', $id)['download.' . static::TYPE];
 
         if ($isDownload || $force) {
-            $resource = static::getResource($message);
+            $resource = static::getResource($message, $id);
 
             if ($resource) {
                 File::saveTo(vbot('config')['user_path'] . static::TYPE . DIRECTORY_SEPARATOR .
@@ -190,9 +190,9 @@ trait Multimedia
         return $message['MsgId'] . static::EXT;
     }
 
-    protected static function getDefaultFile($message)
+    protected static function getDefaultFile($message, int|string $id)
     {
-        return vbot('config')['user_path'] . static::TYPE . DIRECTORY_SEPARATOR . static::fileName($message);
+        return vbot('config', $id)['user_path'] . static::TYPE . DIRECTORY_SEPARATOR . static::fileName($message);
     }
 
     /**
@@ -201,11 +201,11 @@ trait Multimedia
      * @param mixed $message
      * @return mixed
      */
-    private static function getResource($message)
+    private static function getResource($message, int|string $id = 0)
     {
-        $url = static::getDownloadUrl($message);
+        $url = static::getDownloadUrl($message, $id);
 
-        $content = vbot('http')->get($url, static::getDownloadOption($message));
+        $content = vbot('http', $id)->get($url, static::getDownloadOption($message, $id));
 
         if (! $content) {
             vbot('console')->log('download file failed.', Console::WARNING);
@@ -237,9 +237,9 @@ trait Multimedia
      *
      * @return mixed
      */
-    private static function getTicket()
+    private static function getTicket(int|string $id)
     {
-        $cookies = vbot('http')->getClient()->getConfig('cookies')->toArray();
+        $cookies = vbot('http', $id)->getClient()->getConfig('cookies')->toArray();
 
         $key = array_search('webwx_data_ticket', array_column($cookies, 'Name'));
 

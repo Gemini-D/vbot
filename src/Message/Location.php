@@ -19,9 +19,9 @@ class Location extends Message implements MessageInterface
         return str_contains($content['Content'], 'webwxgetpubliclinkimg') && $content['Url'];
     }
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
     protected function parseToContent(): string

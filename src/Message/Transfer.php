@@ -12,8 +12,8 @@ class Transfer extends Message implements MessageInterface
     public const TYPE = 'transfer';
 
     /**
-     * 转账金额 单位 �
-     * �.
+     * 转账金额 单位 �
+     * �.
      *
      * @var string
      */
@@ -33,12 +33,12 @@ class Transfer extends Message implements MessageInterface
 
     private $content;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         $array = (array) simplexml_load_string($this->message, 'SimpleXMLElement', LIBXML_NOCDATA);
 

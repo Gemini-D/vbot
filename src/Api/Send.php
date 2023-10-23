@@ -28,6 +28,8 @@ class Send extends BaseApi
 
         $params = array_merge([$params['username']], explode(',', $params['content']));
 
+        array_unshift($params, $this->vbot->getId());
+
         return $this->response($class::send(...$params), 200);
     }
 }

@@ -28,7 +28,7 @@ class Card extends Message implements MessageInterface
     private $description;
 
     /**
-     * 国�
+     * 国�
      * 为省，国外为国.
      *
      * @var string
@@ -42,12 +42,12 @@ class Card extends Message implements MessageInterface
      */
     private $city;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    public static function send($username, $alias, $nickname = null)
+    public static function send(int|string $id, $username, $alias, $nickname = null)
     {
         if (! $alias || ! $username) {
             return false;
@@ -56,11 +56,11 @@ class Card extends Message implements MessageInterface
         return static::sendMsg([
             'Type' => 42,
             'Content' => "<msg username='{$alias}' nickname='{$nickname}'/>",
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
-        ]);
+        ], $id);
     }
 
     protected function getExpand(): array
@@ -72,7 +72,7 @@ class Card extends Message implements MessageInterface
         ];
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         $this->info = $this->raw['RecommendInfo'];
         $isMatch = preg_match('/bigheadimgurl="(http:\/\/.+?)"\ssmallheadimgurl="(http:\/\/.+?)".+province="(.+?)"\scity="(.+?)".+certflag="(\d+)"\scertinfo="(.+?)"/', $this->message, $matches);
@@ -84,7 +84,7 @@ class Card extends Message implements MessageInterface
             $this->city = $matches[4];
             $flag = $matches[5];
             $desc = $matches[6];
-            if (vbot('officials')->isOfficial($flag)) {
+            if (vbot('officials', $id)->isOfficial($flag)) {
                 $this->isOfficial = true;
                 $this->description = $desc;
             }

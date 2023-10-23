@@ -12,21 +12,21 @@ class Recall extends Message implements MessageInterface
 
     private $origin;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         $msgId = $this->parseMsgId($this->message);
 
-        $this->origin = vbot('cache')->get('msg-' . $msgId);
+        $this->origin = vbot('cache', $id)->get('msg-' . $msgId);
 
         if ($this->origin) {
             $this->nickname = $this->origin['sender'] ?
                 $this->origin['sender']['NickName'] :
-                vbot('contacts')->getAccount($this->origin['raw']['FromUserName'])['NickName'];
+                vbot('contacts', $id)->getAccount($this->origin['raw']['FromUserName'])['NickName'];
         }
     }
 

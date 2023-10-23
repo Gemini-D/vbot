@@ -117,7 +117,7 @@ class MessageHandler
     private function heartbeat($time)
     {
         if (time() - $time > 1800) {
-            Text::send('filehelper', 'heart beat ' . Carbon::now()->toDateTimeString());
+            Text::send($this->vbot->getId(), 'filehelper', 'heart beat ' . Carbon::now()->toDateTimeString());
 
             return time();
         }

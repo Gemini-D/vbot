@@ -20,31 +20,31 @@ class Image extends Message implements MessageInterface
 
     public const TYPE = 'image';
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        static::autoDownload($msg);
+        static::autoDownload($msg, id: $id);
 
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    public static function send($username, $mix)
+    public static function send(int|string $id, $username, $mix)
     {
-        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw']);
+        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw'], $id);
 
         if (! is_file($file)) {
             return false;
         }
 
-        $response = static::uploadMedia($username, $file);
+        $response = static::uploadMedia($id, $username, $file);
 
         return static::sendMsg([
             'Type' => 3,
             'MediaId' => $response['MediaId'],
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
-        ]);
+        ], $id);
     }
 
     protected function parseToContent(): string

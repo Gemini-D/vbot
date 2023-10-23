@@ -69,25 +69,27 @@ abstract class Message
         return Json::encode($this->raw);
     }
 
-    protected function create($msg): array
+    protected function create($msg, int|string $id = 0): array
     {
         $this->raw = $msg;
 
-        $this->setFrom();
-        $this->setFromType();
-        $this->setMessage();
+        $this->setFrom($id);
+        $this->setFromType($id);
+        $this->setMessage($id);
         $this->setTime();
         $this->setUsername();
 
-        return ['raw' => $this->raw, 'from' => $this->from, 'fromType' => $this->fromType, 'sender' => $this->sender,
-            'message' => $this->message, 'time' => $this->time, 'username' => $this->username, ];
+        return [
+            'raw' => $this->raw, 'from' => $this->from, 'fromType' => $this->fromType, 'sender' => $this->sender,
+            'message' => $this->message, 'time' => $this->time, 'username' => $this->username,
+        ];
     }
 
-    protected function getCollection($msg, $type)
+    protected function getCollection($msg, $type, int|string $id = 0)
     {
-        $origin = $this->create($msg);
+        $origin = $this->create($msg, $id);
 
-        $this->afterCreate();
+        $this->afterCreate($id);
 
         $result = array_merge($origin, [
             'content' => $this->parseToContent(),
@@ -97,7 +99,7 @@ abstract class Message
         return new Collection($result);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
     }
 
@@ -112,37 +114,37 @@ abstract class Message
      * 设置消息发送�
      * .
      */
-    private function setFrom()
+    private function setFrom(int|string $id = 0)
     {
-        $this->from = vbot('contacts')->getAccount($this->raw['FromUserName']);
+        $this->from = vbot('contacts', $id)->getAccount($this->raw['FromUserName']);
     }
 
-    private function setFromType()
+    private function setFromType(int|string $id = 0)
     {
         if ($this->raw['MsgType'] == 51) {
             $this->fromType = self::FROM_TYPE_SYSTEM;
-        } elseif ($this->raw['FromUserName'] === vbot('myself')->username) {
+        } elseif ($this->raw['FromUserName'] === vbot('myself', $id)->username) {
             $this->fromType = self::FROM_TYPE_SELF;
-            $this->from = vbot('friends')->getAccount($this->raw['ToUserName']);
-        } elseif (vbot('groups')->isGroup($this->raw['FromUserName'])) { // group
+            $this->from = vbot('friends', $id)->getAccount($this->raw['ToUserName']);
+        } elseif (vbot('groups', $id)->isGroup($this->raw['FromUserName'])) { // group
             $this->fromType = self::FROM_TYPE_GROUP;
-        } elseif (vbot('friends')->get($this->raw['FromUserName'])) {
+        } elseif (vbot('friends', $id)->get($this->raw['FromUserName'])) {
             $this->fromType = self::FROM_TYPE_FRIEND;
-        } elseif (vbot('officials')->get($this->raw['FromUserName'])) {
+        } elseif (vbot('officials', $id)->get($this->raw['FromUserName'])) {
             $this->fromType = self::FROM_TYPE_OFFICIAL;
-        } elseif (vbot('specials')->get($this->raw['FromUserName'], false)) {
+        } elseif (vbot('specials', $id)->get($this->raw['FromUserName'], false)) {
             $this->fromType = self::FROM_TYPE_SPECIAL;
         } else {
             $this->fromType = self::FROM_TYPE_UNKNOWN;
         }
     }
 
-    private function setMessage()
+    private function setMessage(int|string $id = 0)
     {
         $this->message = Content::formatContent($this->raw['Content']);
 
         if ($this->fromType === self::FROM_TYPE_GROUP) {
-            $this->handleGroupContent();
+            $this->handleGroupContent($id);
         }
     }
 
@@ -159,7 +161,7 @@ abstract class Message
      * 处理群发消息的�
      * 容.
      */
-    private function handleGroupContent()
+    private function handleGroupContent(int|string $id = 0)
     {
         $content = $this->message;
 
@@ -169,7 +171,7 @@ abstract class Message
 
         [$uid, $content] = explode(":\n", $content, 2);
 
-        $this->sender = vbot('contacts')->getAccount($uid) ?: vbot('groups')->getMemberByUsername($this->raw['FromUserName'], $uid);
+        $this->sender = vbot('contacts', $id)->getAccount($uid) ?: vbot('groups', $id)->getMemberByUsername($this->raw['FromUserName'], $uid);
         $this->message = Content::replaceBr($content);
     }
 

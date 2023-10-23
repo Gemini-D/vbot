@@ -122,7 +122,7 @@ class Friends extends Contacts
 
         $result = $this->vbot->http->post($url, json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES), true);
 
-        return ApiExceptionHandler::handle($result);
+        return ApiExceptionHandler::handle($result, id: $this->vbot->getId());
     }
 
     /**

@@ -16,12 +16,12 @@ class Share extends Message implements MessageInterface
 
     private $app;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         $array = (array) simplexml_load_string($this->message, 'SimpleXMLElement', LIBXML_NOCDATA);
 

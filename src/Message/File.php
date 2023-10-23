@@ -20,18 +20,18 @@ class File extends Message implements MessageInterface
 
     private $title;
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
         static::autoDownload($msg);
 
-        return $this->getCollection($msg, static::TYPE);
+        return $this->getCollection($msg, static::TYPE, $id);
     }
 
-    public static function send($username, $mix)
+    public static function send(int|string $id, $username, $mix)
     {
-        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw']);
+        $file = is_string($mix) ? $mix : static::getDefaultFile($mix['raw'], $id);
 
-        $response = static::uploadMedia($username, $file);
+        $response = static::uploadMedia($id, $username, $file);
 
         $mediaId = $response['MediaId'];
 
@@ -41,11 +41,11 @@ class File extends Message implements MessageInterface
         return static::sendMsg([
             'Type' => 6,
             'Content' => sprintf("<appmsg appid='wxeb7ec651dd0aefa9' sdkver=''><title>%s</title><des></des><action></action><type>6</type><content></content><url></url><lowurl></lowurl><appattach><totallen>%s</totallen><attachid>%s</attachid><fileext>%s</fileext></appattach><extinfo></extinfo></appmsg>", basename($file), filesize($file), $mediaId, $fileName),
-            'FromUserName' => vbot('myself')->username,
+            'FromUserName' => vbot('myself', $id)->username,
             'ToUserName' => $username,
             'LocalID' => time() * 1e4,
             'ClientMsgId' => time() * 1e4,
-        ]);
+        ], $id);
     }
 
     protected function getExpand(): array
@@ -53,7 +53,7 @@ class File extends Message implements MessageInterface
         return ['title' => $this->title];
     }
 
-    protected function afterCreate()
+    protected function afterCreate(int|string $id = 0)
     {
         $array = (array) simplexml_load_string($this->message, 'SimpleXMLElement', LIBXML_NOCDATA);
 
@@ -69,16 +69,17 @@ class File extends Message implements MessageInterface
         return $serverConfig['uri']['file'] . DIRECTORY_SEPARATOR . static::DOWNLOAD_API;
     }
 
-    protected static function getDownloadOption($msg)
+    protected static function getDownloadOption($msg, int|string $id = 0)
     {
-        return ['query' => [
-            'sender' => $msg['FromUserName'],
-            'mediaid' => $msg['MediaId'],
-            'filename' => $msg['FileName'],
-            'fromuser' => vbot('myself')->username,
-            'pass_ticket' => vbot('config')['server.passTicket'],
-            'webwx_data_ticket' => static::getTicket(),
-        ],
+        return [
+            'query' => [
+                'sender' => $msg['FromUserName'],
+                'mediaid' => $msg['MediaId'],
+                'filename' => $msg['FileName'],
+                'fromuser' => vbot('myself', $id)->username,
+                'pass_ticket' => vbot('config', $id)['server.passTicket'],
+                'webwx_data_ticket' => static::getTicket($id),
+            ],
         ];
     }
 
