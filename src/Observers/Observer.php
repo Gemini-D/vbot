@@ -21,16 +21,10 @@ use Hanson\Vbot\Foundation\Vbot;
  */
 class Observer
 {
-    /**
-     * @var Vbot
-     */
-    protected $vbot;
-
     protected $callback;
 
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function __call($method, $args)

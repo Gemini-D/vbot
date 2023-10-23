@@ -19,21 +19,12 @@ class Console
     public const MESSAGE = 'MESSAGE';
 
     /**
-     * @var Vbot
-     */
-    protected $vbot;
-
-    /**
      * console config.
-     *
-     * @var array
      */
-    protected $config;
+    protected array $config;
 
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
-
         $this->config = $this->vbot->config['console'];
     }
 

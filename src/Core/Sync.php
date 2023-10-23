@@ -9,14 +9,8 @@ use Hanson\Vbot\Foundation\Vbot;
 
 class Sync
 {
-    /**
-     * @var Vbot
-     */
-    private $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     /**

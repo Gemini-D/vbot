@@ -17,14 +17,8 @@ class ContactFactory
         'officialaccounts', 'notification_messages', 'wxid_novlwrv3lqwv11',
         'gh_22b87fa7cb3c', 'wxitil', 'userexperience_alarm', 'notification_messages', ];
 
-    /**
-     * @var Vbot
-     */
-    private $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function fetchAll()

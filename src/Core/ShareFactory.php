@@ -16,14 +16,8 @@ class ShareFactory
 {
     public $type;
 
-    /**
-     * @var Vbot
-     */
-    private $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function make($msg)

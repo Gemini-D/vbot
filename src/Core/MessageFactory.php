@@ -24,16 +24,10 @@ use Hyperf\Collection\Collection;
 class MessageFactory
 {
     /**
-     * @var Vbot
-     */
-    private $vbot;
-
-    /**
      * MessageFactory constructor.
      */
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function make(mixed $msg): ?Collection

@@ -16,14 +16,8 @@ use Throwable;
 
 class Server
 {
-    /**
-     * @var Vbot
-     */
-    protected $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function serve()

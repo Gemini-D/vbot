@@ -10,10 +10,7 @@ use Hyperf\Collection\Collection;
 
 class Contacts extends Collection
 {
-    /**
-     * @var Vbot
-     */
-    protected $vbot;
+    protected ?Vbot $vbot = null;
 
     public function __construct()
     {

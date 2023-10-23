@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace Hanson\Vbot\Contact;
 
+use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Support\Content;
 
 class Myself
@@ -15,6 +16,8 @@ class Myself
     public $uin;
 
     public $sex;
+
+    protected ?Vbot $vbot = null;
 
     public function init($user)
     {
@@ -28,21 +31,28 @@ class Myself
         $this->setPath();
     }
 
+    public function setVbot(Vbot $vbot)
+    {
+        $this->vbot = $vbot;
+
+        return $this;
+    }
+
     private function log()
     {
-        vbot('console')->log('current user\'s nickname:' . $this->nickname);
-        vbot('console')->log('current user\'s username:' . $this->username);
-        vbot('console')->log('current user\'s uin:' . $this->uin);
+        $this->vbot->console->log('current user\'s nickname:' . $this->nickname);
+        $this->vbot->console->log('current user\'s username:' . $this->username);
+        $this->vbot->console->log('current user\'s uin:' . $this->uin);
     }
 
     private function setPath()
     {
-        $path = vbot('config')['user_path'];
+        $path = $this->vbot->config['user_path'];
 
-        vbot('config')['user_path'] = $path . $this->uin . DIRECTORY_SEPARATOR;
+        $this->vbot->config['user_path'] = $path . $this->uin . DIRECTORY_SEPARATOR;
 
-        if (! is_dir(vbot('config')['user_path']) && $this->uin) {
-            mkdir(vbot('config')['user_path'], 0755, true);
+        if (! is_dir($this->vbot->config['user_path']) && $this->uin) {
+            mkdir($this->vbot->config['user_path'], 0755, true);
         }
     }
 }

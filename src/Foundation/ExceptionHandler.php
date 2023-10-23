@@ -37,14 +37,8 @@ class ExceptionHandler
      */
     protected $handler;
 
-    /**
-     * @var Vbot
-     */
-    protected $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     /**

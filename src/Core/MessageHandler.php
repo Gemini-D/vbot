@@ -13,18 +13,12 @@ use Hyperf\Collection\Collection;
 
 class MessageHandler
 {
-    /**
-     * @var Vbot
-     */
-    protected $vbot;
-
     protected $handler;
 
     protected $customHandler;
 
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function listen($server = null)

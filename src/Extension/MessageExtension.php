@@ -17,20 +17,14 @@ class MessageExtension
     public $baseExtensions = [];
 
     /**
-     * @var Vbot
-     */
-    protected $vbot;
-
-    /**
      * 业务扩展.
      *
      * @var array
      */
     protected $serviceExtensions = [];
 
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     /**

@@ -8,11 +8,8 @@ use Hanson\Vbot\Foundation\Vbot;
 
 abstract class BaseApi
 {
-    protected $vbot;
-
-    public function __construct(Vbot $vbot)
+    public function __construct(protected Vbot $vbot)
     {
-        $this->vbot = $vbot;
     }
 
     public function validate($params)

@@ -22,8 +22,8 @@ class ContactServiceProvider implements ServiceProviderInterface
         $pimple['contactFactory'] = function () use ($pimple) {
             return new ContactFactory($pimple);
         };
-        $pimple['myself'] = function () {
-            return new Myself();
+        $pimple['myself'] = function () use ($pimple) {
+            return (new Myself())->setVbot($pimple);
         };
         $pimple['friends'] = function () use ($pimple) {
             return (new Friends())->setVbot($pimple);
