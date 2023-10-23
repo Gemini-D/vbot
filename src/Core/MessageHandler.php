@@ -158,7 +158,7 @@ class MessageHandler
                 if ($collection) {
                     $this->console($collection);
                     if (! $this->vbot->messageExtension->exec($collection) && $this->handler) {
-                        call_user_func_array($this->handler, [$collection]);
+                        call_user_func_array($this->handler, [$collection, $this->vbot]);
                     }
                 }
             }
