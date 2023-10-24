@@ -98,8 +98,9 @@ class Vbot extends Container
     private function initializeConfig(array $config, int|string $id = 0)
     {
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
+        $path = rtrim($path, '/') . '/' . $id;
         $default = [
-            'path' => $path . '/' . $id,
+            'path' => $path,
             'session' => 'vbot:' . $id,
             'download' => [
                 'emoticon_path' => $path . '/emoticon',
