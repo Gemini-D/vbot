@@ -99,10 +99,10 @@ class Vbot extends Container
     {
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
         $default = [
-            'path' => $path,
+            'path' => $path . '/' . $id,
             'session' => 'vbot:' . $id,
             'download' => [
-                'emoticon_path' => $path . "/{$id}/emoticon",
+                'emoticon_path' => $path . '/emoticon',
             ],
         ];
         $this['config'] = new Repository(array_merge($default, $config));
