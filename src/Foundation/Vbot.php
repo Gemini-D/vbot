@@ -68,7 +68,7 @@ class Vbot extends Container
 
     public function __construct(array $config, protected int|string $id = 0)
     {
-        $this->initializeConfig($config);
+        $this->initializeConfig($config, $id);
 
         (new Kernel($this))->bootstrap();
 
@@ -95,14 +95,14 @@ class Vbot extends Container
         }
     }
 
-    private function initializeConfig(array $config)
+    private function initializeConfig(array $config, int|string $id = 0)
     {
         $path = defined('BASE_PATH') ? BASE_PATH . '/runtime/vbot' : __DIR__;
         $default = [
             'path' => $path,
-            'session' => 'vbot',
+            'session' => 'vbot:' . $id,
             'download' => [
-                'emoticon_path' => $path . '/emoticon',
+                'emoticon_path' => $path . "/{$id}/emoticon",
             ],
         ];
         $this['config'] = new Repository(array_merge($default, $config));
