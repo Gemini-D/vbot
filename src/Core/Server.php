@@ -16,23 +16,30 @@ use Throwable;
 
 class Server
 {
+    protected bool $running = false;
+
     public function __construct(protected Vbot $vbot)
     {
     }
 
     public function serve()
     {
-        if (! $this->tryLogin()) {
-            $this->cleanCookies();
-            $this->login();
-        }
+        try {
+            $this->running = true;
+            if (! $this->tryLogin()) {
+                $this->cleanCookies();
+                $this->login();
+            }
 
-        $this->init();
+            $this->init();
 
-        if ($this->vbot->config['swoole.status']) {
-            $this->vbot->swoole->run();
-        } else {
-            $this->vbot->messageHandler->listen();
+            if ($this->vbot->config['swoole.status']) {
+                $this->vbot->swoole->run();
+            } else {
+                $this->vbot->messageHandler->listen();
+            }
+        } finally {
+            $this->running = false;
         }
     }
 
@@ -65,6 +72,11 @@ class Server
     public function saveServer()
     {
         $this->vbot->cache->forever('session.' . $this->vbot->config['session'], json_encode($this->vbot->config['server']));
+    }
+
+    public function isRunning(): bool
+    {
+        return $this->running;
     }
 
     /**
