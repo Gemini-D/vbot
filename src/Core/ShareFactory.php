@@ -20,7 +20,7 @@ class ShareFactory
     {
     }
 
-    public function make($msg)
+    public function make($msg, int|string $id = 0)
     {
         try {
             $xml = Content::formatContent($msg['Content']);
@@ -28,15 +28,15 @@ class ShareFactory
             $this->parse($xml);
 
             if ($this->type == 6) {
-                return (new File())->make($msg);
+                return (new File())->make($msg, $id);
             }
             if ($this->vbot->officials->get($msg['FromUserName'])) {
-                return (new Official())->make($msg);
+                return (new Official())->make($msg, $id);
             }
             if ($this->type == 33) {
-                return (new Mina())->make($msg);
+                return (new Mina())->make($msg, $id);
             }
-            return (new Share())->make($msg);
+            return (new Share())->make($msg, $id);
         } catch (Exception $e) {
             return;
         }
