@@ -21,7 +21,7 @@ trait SendAble
         ];
 
         $result = vbot('http', $id)->post(
-            static::getUrl(),
+            static::getUrl($id),
             json_encode($data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES),
             true
         );
