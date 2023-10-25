@@ -29,6 +29,7 @@ use Psr\Log\LoggerInterface;
  * @property \Hanson\Vbot\Console\Console $console
  * @property \Hanson\Vbot\Observers\Observer $observer
  * @property \Hanson\Vbot\Observers\QrCodeObserver $qrCodeObserver
+ * @property \Hanson\Vbot\Observers\ScanQrCodeObserver $scanQrCodeObserver
  * @property \Hanson\Vbot\Observers\NeedActivateObserver $needActivateObserver
  * @property \Hanson\Vbot\Observers\LoginSuccessObserver $loginSuccessObserver
  * @property \Hanson\Vbot\Observers\ReLoginSuccessObserver $reLoginSuccessObserver

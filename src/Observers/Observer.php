@@ -12,6 +12,7 @@ use Hanson\Vbot\Foundation\Vbot;
  * Class Observer.
  *
  * @method setQrCodeObserver($callback)
+ * @method setScanQrCodeObserver($callback)
  * @method setLoginSuccessObserver($callback)
  * @method setReLoginSuccessObserver($callback)
  * @method setExitObserver($callback)

@@ -116,6 +116,7 @@ class Server
                 case '201':
                     $this->vbot->console->log('please confirm login in wechat.');
                     $tip = 0;
+                    $this->vbot->scanQrCodeObserver->trigger();
                     break;
                 case '200':
                     preg_match('/window.redirect_uri="(https:\/\/(\S+?)\/\S+?)";/', $content, $matches);

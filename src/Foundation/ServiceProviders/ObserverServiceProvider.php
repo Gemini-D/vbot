@@ -13,6 +13,7 @@ use Hanson\Vbot\Observers\NeedActivateObserver;
 use Hanson\Vbot\Observers\Observer;
 use Hanson\Vbot\Observers\QrCodeObserver;
 use Hanson\Vbot\Observers\ReLoginSuccessObserver;
+use Hanson\Vbot\Observers\ScanQrCodeObserver;
 use Pimple\Container;
 
 class ObserverServiceProvider implements ServiceProviderInterface
@@ -24,6 +25,9 @@ class ObserverServiceProvider implements ServiceProviderInterface
         };
         $pimple['qrCodeObserver'] = function () use ($pimple) {
             return new QrCodeObserver($pimple);
+        };
+        $pimple['scanQrCodeObserver'] = function () use ($pimple) {
+            return new ScanQrCodeObserver($pimple);
         };
         $pimple['loginSuccessObserver'] = function () use ($pimple) {
             return new LoginSuccessObserver($pimple);
