@@ -33,7 +33,7 @@ class VbotFactory
         if (! static::has($id)) {
             $key = VbotFactory::class . '::' . $id;
             if (Locker::lock($key)) {
-                static::set($id, $callable());
+                static::set($id, $callable($id));
                 Locker::unlock($key);
             }
         }
