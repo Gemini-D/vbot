@@ -79,10 +79,15 @@ class Server
         return $this->running;
     }
 
-    public function cleanCookies()
+    public function cleanCookies(): void
     {
         $this->vbot->console->log('cleaning useless cookies.');
         $this->vbot->cache->forget($this->vbot->config['cookie_key']);
+    }
+
+    public function cleanSession(): void
+    {
+        $this->vbot->cache->forget($this->vbot->config['session_key']);
     }
 
     /**
