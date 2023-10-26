@@ -128,6 +128,10 @@ class Server
 
         $this->vbot->console->log('please scan the qrCode with wechat.');
         while ($retryTime > 0) {
+            if (empty($this->vbot->config['server.uuid'])) {
+                throw new FetchUuidException('uuid is empty.');
+            }
+
             $url = sprintf('https://login.weixin.qq.com/cgi-bin/mmwebwx-bin/login?tip=%s&uuid=%s&_=%s', $tip, $this->vbot->config['server.uuid'], time());
 
             $content = $this->vbot->http->get($url, ['timeout' => 35]);
