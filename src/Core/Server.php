@@ -79,6 +79,12 @@ class Server
         return $this->running;
     }
 
+    public function cleanCookies()
+    {
+        $this->vbot->console->log('cleaning useless cookies.');
+        $this->vbot->cache->forget($this->vbot->config['cookie_key']);
+    }
+
     /**
      * get uuid.
      *
@@ -265,12 +271,6 @@ class Server
         $this->vbot->config['server.time'] = Carbon::now()->toDateTimeString();
 
         return false;
-    }
-
-    private function cleanCookies()
-    {
-        $this->vbot->console->log('cleaning useless cookies.');
-        $this->vbot->cache->forget($this->vbot->config['cookie_key']);
     }
 
     /**
