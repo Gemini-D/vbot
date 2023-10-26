@@ -89,7 +89,7 @@ class Http
                 return $this->request($url, $method, $options, true);
             }
 
-            return false;
+            throw $e;
         }
     }
 }
