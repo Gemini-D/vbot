@@ -6,6 +6,7 @@ namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Support\Content;
+use Hyperf\Codec\Json;
 
 class Myself
 {
@@ -17,6 +18,8 @@ class Myself
 
     public $sex;
 
+    public array $raw = [];
+
     protected ?Vbot $vbot = null;
 
     public function init($user)
@@ -25,6 +28,7 @@ class Myself
         $this->username = $user['UserName'];
         $this->sex = $user['Sex'];
         $this->uin = $user['Uin'];
+        $this->raw = $user;
 
         $this->log();
 
@@ -43,6 +47,7 @@ class Myself
         $this->vbot->console->log('current user\'s nickname:' . $this->nickname);
         $this->vbot->console->log('current user\'s username:' . $this->username);
         $this->vbot->console->log('current user\'s uin:' . $this->uin);
+        $this->vbot->console->log('current user\'s raw data:' . Json::encode($this->raw));
     }
 
     private function setPath()
