@@ -1,32 +1,15 @@
-<p align="center">
-<a href="http://hanc.cc"><img src="https://img.shields.io/badge/contact-@HanSon-orange.svg?style=flat"></a>
-<img src="https://img.shields.io/badge/license-MIT-green.svg?style=flat">
-</p>
-
-<p align="center">
-  <b>Special thanks to the generous sponsorship by:</b>
-  <br><br>
-  <a target="_blank" href="https://www.jetbrains.com/?from=laravel-work-exception">
-    <img src="https://i.loli.net/2018/03/21/5ab223b75cdfa.png" width=250>
-  </a>
-  <br><br>
-</p>
-
 ## 提示
 
-本项目为**网页协议**，仅供学习参考。
+本项目衍生于 [Hanson/vbot](https://github.com/Hanson/vbot)
 
-如需稳定可靠的生产协议或需要定制需求，可看下面的文档 *微信与企业微信*
-
-个微文档 [文档地址](https://www.apifox.cn/apidoc/shared-71b9855b-693c-48fc-858b-cde2c5afe5a8)
-
-企微文档 [文档地址](https://www.apifox.cn/apidoc/shared-d478def0-67c1-4161-b385-eef8a94e9d17)
+- 高度支持 Hyperf 框架
+- 支持多机器人
 
 ## 安装
 
 ### 环境要求
 
-- PHP >= 7.0
+- PHP >= 8.0
 - [PHP fileinfo 拓展](http://php.net/manual/en/book.fileinfo.php) 储存文件需要用到
 - [PHP gd 拓展](http://php.net/manual/en/book.image.php) 控制台显示二维码
 - [PHP SimpleXML 拓展](https://secure.php.net/manual/en/book.simplexml.php) 解析XML
@@ -40,18 +23,13 @@
 #### composer
 
 ```
-composer require hanson/vbot
+composer require gemini/vbot
 ```
 
 ## 文档
+
 [详细文档](http://create.hanc.cc/vbot)
 
-## SCRM 开源源码
-https://github.com/juhe-scrm/juhe-scrm
-
-## 聚合聊天
-![cd788338d401375c814f0fd66f4fbb81](https://github.com/Hanson/vbot/assets/10583423/034ce0fb-12c2-4ce0-8335-cf5132b17bca)
-
-
 ## 联系我
-![c1dd0c62c37d4a9ab8c6aa7a4e51573](https://user-images.githubusercontent.com/10583423/220509100-a4ecf72e-5d98-41bb-bcbf-41f955c99ba4.jpg)
+
+![wechat](https://foruda.gitee.com/images/1697082615411352318/859339ce_775029.jpeg ':size=375')
