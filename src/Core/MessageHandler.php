@@ -10,6 +10,7 @@ use Hanson\Vbot\Exceptions\VBotExitException;
 use Hanson\Vbot\Foundation\Vbot;
 use Hanson\Vbot\Message\Text;
 use Hyperf\Collection\Collection;
+use Throwable;
 
 class MessageHandler
 {
@@ -125,9 +126,17 @@ class MessageHandler
         return $time;
     }
 
-    private function checkSync()
+    private function checkSync(bool $tryAgain = false)
     {
-        return $this->vbot->sync->checkSync();
+        try {
+            return $this->vbot->sync->checkSync();
+        } catch (Throwable $exception) {
+            if ($tryAgain) {
+                throw $exception;
+            }
+
+            return $this->checkSync(true);
+        }
     }
 
     /**
