@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hanson\Vbot\Support;
 
 use Exception;
+use GuzzleHttp\Client;
 use GuzzleHttp\Client as HttpClient;
 use Hanson\Vbot\Console\Console;
 use Hanson\Vbot\Core\Http\CacheCookieJar;
@@ -57,7 +58,7 @@ class Http
     /**
      * Return GuzzleHttp\Client instance.
      *
-     * @return \GuzzleHttp\Client
+     * @return Client
      */
     public function getClient()
     {

@@ -6,12 +6,13 @@ namespace Hanson\Vbot\Foundation\ServiceProviders;
 
 use Hanson\Vbot\Foundation\ExceptionHandler;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
+use Hanson\Vbot\Foundation\Vbot;
 use Pimple\Container;
 
 class ExceptionServiceProvider implements ServiceProviderInterface
 {
     /**
-     * @param \Hanson\Vbot\Foundation\Vbot $pimple
+     * @param Vbot $pimple
      */
     public function register(Container $pimple)
     {

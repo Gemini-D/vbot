@@ -4,47 +4,77 @@ declare(strict_types=1);
 
 namespace Hanson\Vbot\Foundation;
 
+use Hanson\Vbot\Api\ApiHandler;
+use Hanson\Vbot\Console\Console;
+use Hanson\Vbot\Console\QrCode;
+use Hanson\Vbot\Contact\Contacts;
+use Hanson\Vbot\Contact\Friends;
+use Hanson\Vbot\Contact\Groups;
+use Hanson\Vbot\Contact\Members;
+use Hanson\Vbot\Contact\Myself;
+use Hanson\Vbot\Contact\Officials;
+use Hanson\Vbot\Contact\Specials;
+use Hanson\Vbot\Core\Cache\SimpleCache;
 use Hanson\Vbot\Core\Config\Repository;
+use Hanson\Vbot\Core\ContactFactory;
+use Hanson\Vbot\Core\MessageFactory;
+use Hanson\Vbot\Core\MessageHandler;
+use Hanson\Vbot\Core\Server;
+use Hanson\Vbot\Core\ShareFactory;
+use Hanson\Vbot\Core\Swoole;
+use Hanson\Vbot\Core\Sync;
+use Hanson\Vbot\Extension\MessageExtension;
+use Hanson\Vbot\Message\Text;
+use Hanson\Vbot\Observers\BeforeMessageObserver;
+use Hanson\Vbot\Observers\ExitObserver;
+use Hanson\Vbot\Observers\FetchContactObserver;
+use Hanson\Vbot\Observers\LoginSuccessObserver;
+use Hanson\Vbot\Observers\NeedActivateObserver;
+use Hanson\Vbot\Observers\Observer;
+use Hanson\Vbot\Observers\QrCodeObserver;
+use Hanson\Vbot\Observers\ReLoginSuccessObserver;
+use Hanson\Vbot\Observers\ScanQrCodeObserver;
+use Hanson\Vbot\Support\Http;
 use Pimple\Container;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class Vbot.ShareFactory.
  *
- * @property \Hanson\Vbot\Core\Server $server
- * @property \Hanson\Vbot\Core\Swoole $swoole
- * @property \Hanson\Vbot\Core\MessageHandler $messageHandler
- * @property \Hanson\Vbot\Core\MessageFactory $messageFactory
- * @property \Hanson\Vbot\Core\ShareFactory $shareFactory
- * @property \Hanson\Vbot\Extension\MessageExtension $messageExtension
- * @property \Hanson\Vbot\Message\Text $text
- * @property \Hanson\Vbot\Core\Sync $sync
- * @property \Hanson\Vbot\Core\ContactFactory $contactFactory
- * @property \Hanson\Vbot\Foundation\ExceptionHandler $exception
+ * @property Server $server
+ * @property Swoole $swoole
+ * @property MessageHandler $messageHandler
+ * @property MessageFactory $messageFactory
+ * @property ShareFactory $shareFactory
+ * @property MessageExtension $messageExtension
+ * @property Text $text
+ * @property Sync $sync
+ * @property ContactFactory $contactFactory
+ * @property ExceptionHandler $exception
  * @property LoggerInterface $log
  * @property LoggerInterface $messageLog
- * @property \Hanson\Vbot\Support\Http $http
- * @property \Hanson\Vbot\Api\ApiHandler $api
- * @property \Hanson\Vbot\Console\QrCode $qrCode
- * @property \Hanson\Vbot\Console\Console $console
- * @property \Hanson\Vbot\Observers\Observer $observer
- * @property \Hanson\Vbot\Observers\QrCodeObserver $qrCodeObserver
- * @property \Hanson\Vbot\Observers\ScanQrCodeObserver $scanQrCodeObserver
- * @property \Hanson\Vbot\Observers\NeedActivateObserver $needActivateObserver
- * @property \Hanson\Vbot\Observers\LoginSuccessObserver $loginSuccessObserver
- * @property \Hanson\Vbot\Observers\ReLoginSuccessObserver $reLoginSuccessObserver
- * @property \Hanson\Vbot\Observers\ExitObserver $exitObserver
- * @property \Hanson\Vbot\Observers\FetchContactObserver $fetchContactObserver
- * @property \Hanson\Vbot\Observers\BeforeMessageObserver $beforeMessageObserver
- * @property \Hanson\Vbot\Core\Config\Repository $config
- * @property \Hanson\Vbot\Core\Cache\SimpleCache $cache
- * @property \Hanson\Vbot\Contact\Myself $myself
- * @property \Hanson\Vbot\Contact\Friends $friends
- * @property \Hanson\Vbot\Contact\Contacts $contacts
- * @property \Hanson\Vbot\Contact\Groups $groups
- * @property \Hanson\Vbot\Contact\Members $members
- * @property \Hanson\Vbot\Contact\Officials $officials
- * @property \Hanson\Vbot\Contact\Specials $specials
+ * @property Http $http
+ * @property ApiHandler $api
+ * @property QrCode $qrCode
+ * @property Console $console
+ * @property Observer $observer
+ * @property QrCodeObserver $qrCodeObserver
+ * @property ScanQrCodeObserver $scanQrCodeObserver
+ * @property NeedActivateObserver $needActivateObserver
+ * @property LoginSuccessObserver $loginSuccessObserver
+ * @property ReLoginSuccessObserver $reLoginSuccessObserver
+ * @property ExitObserver $exitObserver
+ * @property FetchContactObserver $fetchContactObserver
+ * @property BeforeMessageObserver $beforeMessageObserver
+ * @property Repository $config
+ * @property SimpleCache $cache
+ * @property Myself $myself
+ * @property Friends $friends
+ * @property Contacts $contacts
+ * @property Groups $groups
+ * @property Members $members
+ * @property Officials $officials
+ * @property Specials $specials
  */
 class Vbot extends Container
 {

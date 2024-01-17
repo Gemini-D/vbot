@@ -92,7 +92,7 @@ class Emoticon extends Message implements MessageInterface
         if (is_file($path = vbot('config', $id)['user_path'] . static::TYPE . DIRECTORY_SEPARATOR . $message['MsgId'] . static::EXT)) {
             static::copyFromEmoticon($path, $id);
         } else {
-            static::saveFromApi($message);
+            static::saveFromApi($message, $id);
         }
     }
 

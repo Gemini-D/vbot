@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Hanson\Vbot\Contact;
 
 use Hanson\Vbot\Exceptions\CreateGroupException;
+use Hyperf\Collection\Collection;
 
 class Groups extends Contacts
 {
@@ -244,7 +245,7 @@ class Groups extends Contacts
      * @param mixed $key
      * @param mixed $value
      *
-     * @return \Illuminate\Support\Collection
+     * @return Collection
      */
     public function put($key, $value): static
     {

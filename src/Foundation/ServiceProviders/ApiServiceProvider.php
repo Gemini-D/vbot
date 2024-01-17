@@ -8,12 +8,13 @@ use Hanson\Vbot\Api\ApiHandler;
 use Hanson\Vbot\Api\Search;
 use Hanson\Vbot\Api\Send;
 use Hanson\Vbot\Foundation\ServiceProviderInterface;
+use Hanson\Vbot\Foundation\Vbot;
 use Pimple\Container;
 
 class ApiServiceProvider implements ServiceProviderInterface
 {
     /**
-     * @param \Hanson\Vbot\Foundation\Vbot $pimple
+     * @param Vbot $pimple
      */
     public function register(Container $pimple)
     {
